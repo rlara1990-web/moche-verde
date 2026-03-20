@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moche Verde · Festival Dashboard 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+  :root {
+    --lime:#B5F23D;--dark:#0D0F0C;--dark2:#141712;--dark3:#1C2018;
+    --card:#181B15;--border:rgba(181,242,61,0.12);--border2:rgba(255,255,255,0.06);
+    --text:#E8F0D8;--muted:#7A8A6A;--red:#FF5050;--orange:#FF8C3B;
+    --teal:#3BF2C8;--blue:#5B8EFF;--yellow:#FFD93B;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;overflow-x:hidden;}
+  .header{padding:18px 26px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--dark2);position:sticky;top:0;z-index:100;gap:16px;}
+  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;color:var(--lime);white-space:nowrap;}
+  .logo span{color:var(--text);opacity:0.4;}
+  .nav-tabs{display:flex;gap:3px;background:var(--dark3);padding:4px;border-radius:10px;border:1px solid var(--border2);}
+  .nav-tab{padding:7px 14px;border-radius:7px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);border:none;background:transparent;white-space:nowrap;transition:all .2s;}
+  .nav-tab.active{background:var(--lime);color:var(--dark);font-weight:500;}
+  .nav-tab:hover:not(.active){color:var(--text);}
+  .header-link{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;padding:6px 14px;border:1px solid var(--border2);border-radius:8px;transition:all .2s;white-space:nowrap;}
+  .header-link:hover{color:var(--lime);border-color:var(--border);}
+  main{padding:22px 26px;max-width:1600px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;}
+  .kpi-card{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:16px;position:relative;overflow:hidden;}
+  .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);}
+  .kpi-card.red::before{background:var(--red);}.kpi-card.orange::before{background:var(--orange);}
+  .kpi-card.teal::before{background:var(--teal);}.kpi-card.blue::before{background:var(--blue);}
+  .kpi-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;}
+  .kpi-value{font-family:'Syne',sans-serif;font-weight:700;font-size:24px;color:var(--text);line-height:1;margin-bottom:3px;}
+  .kpi-sub{font-size:11px;color:var(--muted);}
+  .badge{display:inline-block;font-family:'DM Mono',monospace;font-size:10px;padding:2px 7px;border-radius:4px;margin-top:4px;}
+  .bg{background:rgba(181,242,61,.15);color:var(--lime);}.br{background:rgba(255,80,80,.15);color:var(--red);}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;}
+  .g31{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px;}
+  .cc{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:18px;}
+  .ct{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:2px;}
+  .cs{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:14px;}
+  .sh{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .sh h2{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;white-space:nowrap;}
+  .sh .ln{flex:1;height:1px;background:var(--border2);}
+  .stag{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--lime);}
+  input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:var(--dark3);border-radius:4px;outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--lime);cursor:pointer;border:2px solid var(--dark);}
+  .sg{margin-bottom:14px;}
+  .sr{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+  .sl{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+  .sv{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;color:var(--lime);min-width:55px;text-align:right;}
+  .rp{background:var(--dark3);border:1px solid var(--border);border-radius:12px;padding:16px;}
+  .rr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border2);}
+  .rr:last-child{border-bottom:none;}
+  .rl{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+  .rv{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;}
+  .rv.g{color:var(--lime);}.rv.r{color:var(--red);}.rv.o{color:var(--orange);}.rv.b{color:var(--blue);}.rv.t{color:var(--teal);}
+  .trow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+  .chip{padding:5px 12px;border-radius:20px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;border:1px solid var(--border2);background:var(--dark3);color:var(--muted);transition:all .2s;}
+  .chip.on{background:rgba(181,242,61,.15);border-color:var(--lime);color:var(--lime);}
+  .mt{width:100%;border-collapse:collapse;}
+  .mt th{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;padding:7px 8px;border-bottom:1px solid var(--border2);text-align:left;}
+  .mt td{padding:7px 8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03);}
+  .mt tr:last-child td{border-bottom:none;}
+  .mt .n{font-family:'DM Mono',monospace;text-align:right;}
+  .hm{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;margin-top:8px;}
+  .hmc{height:28px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:8px;cursor:pointer;position:relative;}
+  .hmc:hover{transform:scaleY(1.2);z-index:2;}
+  .hmc:hover::after{content:attr(data-t);position:absolute;bottom:110%;left:50%;transform:translateX(-50%);background:var(--dark2);border:1px solid var(--border);border-radius:6px;padding:5px 9px;font-size:10px;white-space:nowrap;color:var(--text);z-index:10;pointer-events:none;}
+  .hml{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;margin-top:3px;}
+  .hmlc{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-align:center;}
+  .bem{background:var(--dark3);border-radius:8px;padding:12px;margin-bottom:8px;text-align:center;}
+  .bev{font-family:'Syne',sans-serif;font-weight:800;font-size:32px;line-height:1;}
+  .bel{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px;}
+  .fp{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:18px;margin-bottom:12px;}
+  .fh{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+  .fd{width:10px;height:10px;border-radius:50%;}
+  .fn{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+  .ptgl{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+  .pb{padding:5px 11px;border-radius:8px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;border:1px solid var(--border2);background:var(--dark3);color:var(--muted);transition:all .2s;}
+  .pb.active{background:rgba(59,242,200,.15);border-color:var(--teal);color:var(--teal);}
+  .sc2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:1200px){.kpi-row{grid-template-columns:repeat(3,1fr);}.g3{grid-template-columns:1fr 1fr;}}
+  @media(max-width:900px){main{padding:12px;}.kpi-row{grid-template-columns:1fr 1fr;}.g2,.g31,.sc2{grid-template-columns:1fr;}}
+  @media(max-width:600px){
+    .header{padding:12px 14px;gap:8px;flex-wrap:wrap;}
+    .logo{font-size:16px;}
+    .logo span{display:none;}
+    .nav-tabs{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:3px;}
+    .nav-tabs::-webkit-scrollbar{display:none;}
+    .nav-tab{padding:6px 11px;font-size:10px;white-space:nowrap;flex-shrink:0;}
+    .header-link{font-size:10px;padding:5px 10px;white-space:nowrap;}
+    main{padding:10px;}
+    .kpi-row{grid-template-columns:1fr 1fr!important;}
+    .kpi-value{font-size:20px;}
+    .g2,.g3,.g31,.g13,.sc2{grid-template-columns:1fr!important;}
+    .fp{padding:14px;}
+    .fn{font-size:12px;}
+    .mt td,.mt th{padding:5px 7px;font-size:11px;}
+  }
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo">MOCHE VERDE <span>· 2026 Dashboard</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('results',this)">2025 Results</button>
+    <button class="nav-tab" onclick="showTab('costs',this)">Bowl Costs</button>
+    <button class="nav-tab" onclick="showTab('proj',this)">2026 Projections</button>
+    <button class="nav-tab" onclick="showTab('scenario',this)">Scenario Builder</button>
+  </div>
+  <a class="header-link" href="moche_verde_groceries.html">🛒 Groceries</a>
+</header>
+<main>
+
+<!-- ══ TAB 1: 2025 RESULTS ══ -->
+<div id="results" class="section active">
+  <div class="sh"><h2>Waking Life 2025 — Actual Results</h2><div class="ln"></div><div class="stag">Jun 18–23 · Simplified VAT Regime</div></div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-label">Total Revenue</div><div class="kpi-value">€32,001</div><div class="kpi-sub">6 operating days</div><span class="badge bg">Target exceeded</span></div>
+    <div class="kpi-card orange"><div class="kpi-label">Variable Costs</div><div class="kpi-value">€13,455</div><div class="kpi-sub">incl. 30% WL commission</div><span class="badge br">42.0% of rev</span></div>
+    <div class="kpi-card red"><div class="kpi-label">Fixed Costs</div><div class="kpi-value">€6,488</div><div class="kpi-sub">truck + staff + setup</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Net Profit</div><div class="kpi-value">€12,057</div><div class="kpi-sub">operating margin</div><span class="badge bg">37.7%</span></div>
+    <div class="kpi-card blue"><div class="kpi-label">Bowls Sold (est.)</div><div class="kpi-value">~2,688</div><div class="kpi-sub">avg €11.91 ticket</div><span class="badge bg">57.9% contrib.</span></div>
+  </div>
+  <div class="g31">
+    <div class="cc"><div class="ct">Revenue & Contribution by Hour</div><div class="cs">AGGREGATED · ALL OPERATING DAYS</div><canvas id="hourlyChart" height="200"></canvas></div>
+    <div class="cc"><div class="ct">Time Segments</div><div class="cs">TOTAL CONTRIBUTION</div>
+      <canvas id="tramoDonut" height="140" style="margin-top:8px;"></canvas>
+      <div style="margin-top:10px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;"><div style="width:9px;height:9px;border-radius:50%;background:#FF5050;flex-shrink:0;"></div><span style="font-size:11px;flex:1;">Valley (0–10h, 23h)</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">€1,735 · 9.4%</span></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;"><div style="width:9px;height:9px;border-radius:50%;background:#FFD93B;flex-shrink:0;"></div><span style="font-size:11px;flex:1;">Mid (11h–16h)</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">€6,220 · 33.5%</span></div>
+        <div style="display:flex;align-items:center;gap:8px;"><div style="width:9px;height:9px;border-radius:50%;background:#B5F23D;flex-shrink:0;"></div><span style="font-size:11px;flex:1;">Peak (17h–22h)</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">€10,591 · 57.1%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="cc" style="margin-bottom:12px;">
+    <div class="ct">Hourly Activity Heatmap</div><div class="cs">GREEN = ABOVE BREAK-EVEN · RED = BELOW · NUMBER = UNITS SOLD</div>
+    <div class="hm" id="heatmap"></div><div class="hml" id="heatmapL"></div>
+  </div>
+  <div class="g2">
+    <div class="cc"><div class="ct">Revenue by Day</div><div class="cs">GROSS SALES · 6 DAYS</div><canvas id="dailyChart" height="200"></canvas></div>
+    <div class="cc"><div class="ct">P&L Summary</div><div class="cs">WAKING LIFE 2025 · NO VAT DECLARED (SIMPLIFIED REGIME)</div>
+      <table class="mt" style="margin-top:10px;">
+        <thead><tr><th>Item</th><th class="n">€</th><th class="n">%</th></tr></thead>
+        <tbody>
+          <tr><td>Gross Revenue</td><td class="n" style="color:var(--lime)">32,000.86</td><td class="n">100%</td></tr>
+          <tr><td>— WL Commission (30%)</td><td class="n" style="color:var(--red)">-8,700.24</td><td class="n" style="color:var(--red)">-27.2%</td></tr>
+          <tr><td>— Ingredients</td><td class="n" style="color:var(--red)">-4,755.10</td><td class="n" style="color:var(--red)">-14.9%</td></tr>
+          <tr><td><b>Gross Contribution</b></td><td class="n" style="color:var(--teal)">18,545.52</td><td class="n" style="color:var(--teal)">57.9%</td></tr>
+          <tr><td>— Fixed Costs</td><td class="n" style="color:var(--orange)">-6,488.27</td><td class="n" style="color:var(--orange)">-20.3%</td></tr>
+          <tr><td><b>Net Profit</b></td><td class="n" style="color:var(--lime);font-weight:700">12,057.25</td><td class="n" style="color:var(--lime);font-weight:700">37.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- WM PRICE ANALYSIS -->
+  <div class="cc">
+    <div class="ct">🍉 Watermelon Slices — Price Sensitivity (New 2026, WL Only)</div>
+    <div class="cs">COST: ~€0.108/serving (180g @ €1.80/kg) · WL COMMISSION 30% ON NET PRICE · VAT 6%</div>
+    <div class="ptgl" id="wmPriceToggles">
+      <button class="pb" onclick="setWM(2.0,this)">€2.00</button>
+      <button class="pb" onclick="setWM(2.5,this)">€2.50</button>
+      <button class="pb active" onclick="setWM(3.0,this)">€3.00</button>
+      <button class="pb" onclick="setWM(3.5,this)">€3.50</button>
+      <button class="pb" onclick="setWM(4.0,this)">€4.00</button>
+      <button class="pb" onclick="setWM(5.0,this)">€5.00</button>
+    </div>
+    <div class="g3" id="wmPanel" style="margin-bottom:0;"></div>
+  </div>
+</div>
+
+<!-- ══ TAB 2: BOWL COSTS ══ -->
+<div id="costs" class="section">
+  <div class="sh"><h2>Bowl Cost Breakdown — 2026</h2><div class="ln"></div><div class="stag">Price: €14 · VAT: 13%</div></div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-label">Selling Price (incl. VAT)</div><div class="kpi-value">€14.00</div><div class="kpi-sub">€12.39 ex. 13% VAT</div></div>
+    <div class="kpi-card orange"><div class="kpi-label">Base Bowl Cost</div><div class="kpi-value">€1.001</div><div class="kpi-sub">without protein</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Avg Cost w/ Protein</div><div class="kpi-value">€1.942</div><div class="kpi-sub">avg 3 proteins</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Extra Protein Add-on</div><div class="kpi-value">+€1.50</div><div class="kpi-sub">revenue per bowl</div></div>
+    <div class="kpi-card"><div class="kpi-label">Jalapeño Add-on</div><div class="kpi-value">+€1.00</div><div class="kpi-sub">negligible cost</div></div>
+  </div>
+  <div class="g2">
+    <div class="cc"><div class="ct">Base Bowl Ingredient Composition</div><div class="cs">COST PER INGREDIENT · PER SERVING (no protein)</div><canvas id="bowlDonut" height="260"></canvas></div>
+    <div class="cc"><div class="ct">Net Profit per Bowl by Protein — WL vs PS</div><div class="cs">FROM YOUR SPREADSHEET · WL: after 30% comm · PS: after fixed fee allocation</div><canvas id="proteinBar" height="260"></canvas></div>
+  </div>
+  <div class="g3">
+    <div class="cc"><div class="ct">🍉 Watermelon Tuna ★ Best Net Profit</div><div class="cs">PROTEIN VARIANT · LOWEST COST = HIGHEST MARGIN</div>
+      <div style="margin-top:12px;">
+        <div class="bem"><div class="bev" style="color:var(--lime)">€7.17</div><div class="bel">Net profit/bowl · Waking Life ★ Best</div></div>
+        <div class="bem"><div class="bev" style="color:var(--lime)">€10.89</div><div class="bel">Net profit/bowl · Primavera Sound ★ Best</div></div>
+        <table class="mt"><tr><td class="rl">Protein cost</td><td class="n">€0.503</td></tr><tr><td class="rl">Base bowl</td><td class="n">€1.001</td></tr><tr><td class="rl">Total cost</td><td class="n">€1.504</td></tr><tr><td class="rl">WL break-even</td><td class="n">~1,003 bowls ★</td></tr><tr><td class="rl">PS break-even</td><td class="n">~946 bowls ★</td></tr></table>
+      </div>
+    </div>
+    <div class="cc"><div class="ct">🫘 Black Bean Ceviche</div><div class="cs">PROTEIN VARIANT</div>
+      <div style="margin-top:12px;">
+        <div class="bem"><div class="bev" style="color:var(--orange)">€6.77</div><div class="bel">Net profit/bowl · Waking Life</div></div>
+        <div class="bem"><div class="bev" style="color:var(--blue)">€10.49</div><div class="bel">Net profit/bowl · Primavera Sound</div></div>
+        <table class="mt"><tr><td class="rl">Protein cost</td><td class="n">€0.898</td></tr><tr><td class="rl">Base bowl</td><td class="n">€1.001</td></tr><tr><td class="rl">Total cost</td><td class="n">€1.899</td></tr><tr><td class="rl">WL break-even</td><td class="n">~1,062 bowls</td></tr><tr><td class="rl">PS break-even</td><td class="n">~981 bowls</td></tr></table>
+      </div>
+    </div>
+    <div class="cc"><div class="ct">🧊 Tofu Ceviche</div><div class="cs">PROTEIN VARIANT · HIGHEST COST → LOWEST NET PROFIT/BOWL</div>
+      <div style="margin-top:12px;">
+        <div class="bem"><div class="bev" style="color:var(--red)">€6.25</div><div class="bel">Net profit/bowl · Waking Life (lowest)</div></div>
+        <div class="bem"><div class="bev" style="color:var(--yellow)">€9.96</div><div class="bel">Net profit/bowl · Primavera Sound (lowest)</div></div>
+        <table class="mt"><tr><td class="rl">Protein cost</td><td class="n">€1.424</td></tr><tr><td class="rl">Base bowl</td><td class="n">€1.001</td></tr><tr><td class="rl">Total cost</td><td class="n">€2.425</td></tr><tr><td class="rl">WL break-even</td><td class="n">~1,151 bowls</td></tr><tr><td class="rl">PS break-even</td><td class="n">~1,033 bowls</td></tr></table>
+      </div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="cc"><div class="ct">WL Fixed Costs by Category (2026)</div><div class="cs">€7,191 TOTAL</div><canvas id="fixedBar" height="200"></canvas></div>
+    <div class="cc"><div class="ct">Why Watermelon Gives the Best Net Profit</div><div class="cs">SAME SELLING PRICE €14 FOR ALL — LOWER INGREDIENT COST = HIGHER NET. COMMISSION IS IDENTICAL (30% OF SAME PRICE)</div><canvas id="whyTofu" height="200"></canvas></div>
+  </div>
+</div>
+
+<!-- ══ TAB 3: PROJECTIONS ══ -->
+<div id="proj" class="section">
+  <div class="sh"><h2>2026 Festival Projections</h2><div class="ln"></div><div class="stag">Separate fixed cost structures</div></div>
+
+  <div class="fp">
+    <div class="fh"><div class="fd" style="background:var(--orange);"></div><div class="fn" style="color:var(--orange);">🎪 Waking Life</div><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto;">Commission 30% on net price · Fixed: €7,191</span></div>
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
+      <div class="kpi-card orange"><div class="kpi-label">WL Fixed Costs</div><div class="kpi-value">€7,191</div><div class="kpi-sub">truck+setup+staff</div></div>
+      <div class="kpi-card"><div class="kpi-label">Break-Even (avg)</div><div class="kpi-value">983</div><div class="kpi-sub">bowls needed</div></div>
+      <div class="kpi-card teal"><div class="kpi-label">2025 Actual Profit</div><div class="kpi-value">€12,057</div><div class="kpi-sub">at ~2,688 bowls</div></div>
+      <div class="kpi-card"><div class="kpi-label">Best Protein (WL)</div><div class="kpi-value">Watermelon</div><div class="kpi-sub">€7.17 net/bowl</div></div>
+    </div>
+    <div class="g2">
+      <div class="cc"><div class="ct">WL Profit vs Bowl Volume</div><div class="cs">PRICE €14 · 13% VAT · 30% COMMISSION ON NET</div><canvas id="wlProj" height="190"></canvas></div>
+      <div class="cc"><div class="ct">WL Scenario Table</div><div class="cs">NET PROFIT BY VOLUME · ★ = 2025 BASELINE</div><table class="mt" style="margin-top:8px;" id="wlTable"></table></div>
+    </div>
+  </div>
+
+  <div class="fp">
+    <div class="fh"><div class="fd" style="background:var(--blue);"></div><div class="fn" style="color:var(--blue);">🎵 Primavera Sound Porto</div><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto;">Fixed fee €5,500 included in €10,294 total fixed</span></div>
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
+      <div class="kpi-card blue"><div class="kpi-label">PS Fixed Costs</div><div class="kpi-value">€10,294</div><div class="kpi-sub">fee+truck+setup+staff</div></div>
+      <div class="kpi-card"><div class="kpi-label">Break-Even (avg)</div><div class="kpi-value">937</div><div class="kpi-sub">bowls needed</div></div>
+      <div class="kpi-card teal"><div class="kpi-label">Projected (2,500 bowls)</div><div class="kpi-value" id="psKPI">—</div><div class="kpi-sub">profit estimate</div></div>
+      <div class="kpi-card"><div class="kpi-label">Best Protein (PS)</div><div class="kpi-value">Watermelon</div><div class="kpi-sub">€10.89 net/bowl</div></div>
+    </div>
+    <div class="g2">
+      <div class="cc"><div class="ct">PS Profit vs Bowl Volume</div><div class="cs">PRICE €14 · NO COMMISSION — FIXED FEE MODEL</div><canvas id="psProj" height="190"></canvas></div>
+      <div class="cc"><div class="ct">PS Scenario Table</div><div class="cs">NET PROFIT BY VOLUME</div><table class="mt" style="margin-top:8px;" id="psTable"></table></div>
+    </div>
+  </div>
+
+  <div class="cc"><div class="ct">Combined Season — WL + Primavera Sound</div><div class="cs">BOTH FESTIVALS · SEPARATE FIXED COST STRUCTURES</div><canvas id="combined" height="150"></canvas></div>
+</div>
+
+<!-- ══ TAB 4: SCENARIO BUILDER ══ -->
+<div id="scenario" class="section">
+  <div class="sh"><h2>Scenario Builder</h2><div class="ln"></div><div class="stag">Independent controls per festival</div></div>
+  <div class="sc2">
+
+    <!-- WL -->
+    <div class="fp">
+      <div class="fh"><div class="fd" style="background:var(--orange);"></div><div class="fn" style="color:var(--orange);">🎪 Waking Life</div></div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.06em;">PRODUCTS</div>
+      <div class="trow">
+        <div class="chip on" id="wl-c-mate" onclick="tWL('mate')">🧉 Club Mate</div>
+        <div class="chip on" id="wl-c-wm" onclick="tWL('wm')">🍉 Watermelon</div>
+        <div class="chip on" id="wl-c-jal" onclick="tWL('jal')">🌶️ Jalapeño</div>
+        <div class="chip on" id="wl-c-ep" onclick="tWL('ep')">💪 Extra Protein</div>
+      </div>
+      <div class="sg"><div class="sr"><span class="sl">🍜 Bowls sold</span><span class="sv" id="wv-bowls">2,688</span></div><input type="range" min="500" max="5000" step="50" value="2688" oninput="updWL()" id="ws-bowls"></div>
+      <div class="sg"><div class="sr"><span class="sl">💰 Bowl price (€)</span><span class="sv" id="wv-price">14.00</span></div><input type="range" min="10" max="18" step=".5" value="14" oninput="updWL()" id="ws-price"></div>
+      <div class="sg"><div class="sr"><span class="sl">📅 Festival days</span><span class="sv" id="wv-days">5</span></div><input type="range" min="1" max="7" step="1" value="5" oninput="updWL()" id="ws-days"></div>
+      <div class="sg"><div class="sr"><span class="sl">🧉 Mate attachment rate</span><span class="sv" id="wv-mate">15%</span></div><input type="range" min="0" max="60" step="1" value="15" oninput="updWL()" id="ws-mate"></div>
+      <div class="sg"><div class="sr"><span class="sl">🍉 Watermelon units/day</span><span class="sv" id="wv-wm">50</span></div><input type="range" min="0" max="300" step="10" value="50" oninput="updWL()" id="ws-wm"></div>
+      <div class="sg"><div class="sr"><span class="sl">🍉 Watermelon price (€)</span><span class="sv" id="wv-wmp">€3.00</span></div><input type="range" min="1.5" max="6" step=".5" value="3" oninput="updWL()" id="ws-wmp"></div>
+      <div class="sg"><div class="sr"><span class="sl">🌶️ Jalapeño attachment</span><span class="sv" id="wv-jal">20%</span></div><input type="range" min="0" max="60" step="1" value="20" oninput="updWL()" id="ws-jal"></div>
+      <div class="sg"><div class="sr"><span class="sl">💪 Extra protein attach.</span><span class="sv" id="wv-ep">10%</span></div><input type="range" min="0" max="40" step="1" value="10" oninput="updWL()" id="ws-ep"></div>
+      <div class="sg"><div class="sr"><span class="sl">👥 Staff cost (€)</span><span class="sv" id="wv-staff">€3,000</span></div><input type="range" min="1000" max="8000" step="100" value="3000" oninput="updWL()" id="ws-staff"></div>
+      <div class="sg"><div class="sr"><span class="sl">🏗️ Other fixed (€)</span><span class="sv" id="wv-fix">€4,191</span></div><input type="range" min="500" max="8000" step="100" value="4191" oninput="updWL()" id="ws-fix"></div>
+      <div class="rp" style="margin-top:14px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--orange);margin-bottom:8px;">Waking Life — Result</div>
+        <div class="rr"><span class="rl">Bowl Revenue</span><span class="rv g" id="wr-brev">€0</span></div>
+        <div class="rr"><span class="rl">Club Mate</span><span class="rv b" id="wr-mrev">—</span></div>
+        <div class="rr"><span class="rl">Watermelon</span><span class="rv t" id="wr-wmrev">—</span></div>
+        <div class="rr"><span class="rl">Jalapeño</span><span class="rv" id="wr-jrev">—</span></div>
+        <div class="rr"><span class="rl">Extra Protein</span><span class="rv" id="wr-eprev">—</span></div>
+        <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);">Total Revenue</span><span class="rv g" id="wr-trev" style="font-size:17px;">€0</span></div>
+        <div class="rr"><span class="rl">— Commission (30%)</span><span class="rv r" id="wr-comm">€0</span></div>
+        <div class="rr"><span class="rl">— Ingredients</span><span class="rv r" id="wr-ingr">€0</span></div>
+        <div class="rr"><span class="rl">Gross Contribution</span><span class="rv t" id="wr-contrib">€0</span></div>
+        <div class="rr"><span class="rl">— Fixed Costs</span><span class="rv o" id="wr-fixed">€0</span></div>
+        <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);font-weight:500;">NET PROFIT</span><span class="rv" id="wr-profit" style="font-size:20px;">€0</span></div>
+        <div class="rr"><span class="rl">Margin</span><span class="rv" id="wr-margin">0%</span></div>
+        <div class="rr"><span class="rl">Break-Even</span><span class="rv" id="wr-be">0</span></div>
+      </div>
+      <div class="cc" style="margin-top:10px;padding:14px;"><div class="ct" style="font-size:12px;">WL Waterfall</div><canvas id="wlWfall" height="170"></canvas></div>
+    </div>
+
+    <!-- PS -->
+    <div class="fp">
+      <div class="fh"><div class="fd" style="background:var(--blue);"></div><div class="fn" style="color:var(--blue);">🎵 Primavera Sound Porto</div></div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.06em;">PRODUCTS</div>
+      <div class="trow">
+        <div class="chip on" id="ps-c-wm" onclick="tPS('wm')">🍉 Watermelon</div>
+        <div class="chip on" id="ps-c-jal" onclick="tPS('jal')">🌶️ Jalapeño</div>
+        <div class="chip on" id="ps-c-ep" onclick="tPS('ep')">💪 Extra Protein</div>
+        <div class="chip" style="opacity:.4;cursor:not-allowed;">🚫 No Mate</div>
+      </div>
+      <div class="sg"><div class="sr"><span class="sl">🍜 Bowls sold</span><span class="sv" id="pv-bowls">2,500</span></div><input type="range" min="500" max="5000" step="50" value="2500" oninput="updPS()" id="ps-bowls"></div>
+      <div class="sg"><div class="sr"><span class="sl">💰 Bowl price (€)</span><span class="sv" id="pv-price">14.00</span></div><input type="range" min="10" max="18" step=".5" value="14" oninput="updPS()" id="ps-price"></div>
+      <div class="sg"><div class="sr"><span class="sl">📅 Festival days</span><span class="sv" id="pv-days">4</span></div><input type="range" min="1" max="7" step="1" value="4" oninput="updPS()" id="ps-days"></div>
+      <div class="sg"><div class="sr"><span class="sl">🍉 Watermelon units/day</span><span class="sv" id="pv-wm">50</span></div><input type="range" min="0" max="300" step="10" value="50" oninput="updPS()" id="ps-wm"></div>
+      <div class="sg"><div class="sr"><span class="sl">🍉 Watermelon price (€)</span><span class="sv" id="pv-wmp">€3.00</span></div><input type="range" min="1.5" max="6" step=".5" value="3" oninput="updPS()" id="ps-wmp"></div>
+      <div class="sg"><div class="sr"><span class="sl">🌶️ Jalapeño attachment</span><span class="sv" id="pv-jal">20%</span></div><input type="range" min="0" max="60" step="1" value="20" oninput="updPS()" id="ps-jal"></div>
+      <div class="sg"><div class="sr"><span class="sl">💪 Extra protein attach.</span><span class="sv" id="pv-ep">10%</span></div><input type="range" min="0" max="40" step="1" value="10" oninput="updPS()" id="ps-ep"></div>
+      <div class="sg"><div class="sr"><span class="sl">👥 Staff cost (€)</span><span class="sv" id="pv-staff">€2,000</span></div><input type="range" min="1000" max="8000" step="100" value="2000" oninput="updPS()" id="ps-staff"></div>
+      <div class="sg"><div class="sr"><span class="sl">🏗️ Other fixed (€)</span><span class="sv" id="pv-fix">€8,294</span></div><input type="range" min="500" max="15000" step="100" value="8294" oninput="updPS()" id="ps-fix"></div>
+      <div class="rp" style="margin-top:14px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--blue);margin-bottom:8px;">Primavera Sound — Result</div>
+        <div class="rr"><span class="rl">Bowl Revenue</span><span class="rv g" id="pr-brev">€0</span></div>
+        <div class="rr"><span class="rl">Watermelon</span><span class="rv t" id="pr-wmrev">—</span></div>
+        <div class="rr"><span class="rl">Jalapeño</span><span class="rv" id="pr-jrev">—</span></div>
+        <div class="rr"><span class="rl">Extra Protein</span><span class="rv" id="pr-eprev">—</span></div>
+        <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);">Total Revenue</span><span class="rv g" id="pr-trev" style="font-size:17px;">€0</span></div>
+        <div class="rr"><span class="rl">— Ingredients</span><span class="rv r" id="pr-ingr">€0</span></div>
+        <div class="rr"><span class="rl">Gross Contribution</span><span class="rv t" id="pr-contrib">€0</span></div>
+        <div class="rr"><span class="rl">— Fixed (incl. €5,500 fee)</span><span class="rv o" id="pr-fixed">€0</span></div>
+        <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);font-weight:500;">NET PROFIT</span><span class="rv" id="pr-profit" style="font-size:20px;">€0</span></div>
+        <div class="rr"><span class="rl">Margin</span><span class="rv" id="pr-margin">0%</span></div>
+        <div class="rr"><span class="rl">Break-Even</span><span class="rv" id="pr-be">0</span></div>
+      </div>
+      <div class="cc" style="margin-top:10px;padding:14px;"><div class="ct" style="font-size:12px;">PS Waterfall</div><canvas id="psWfall" height="170"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Combined -->
+  <div class="cc" style="margin-top:12px;">
+    <div class="ct">Combined Season</div><div class="cs">BASED ON CURRENT SLIDER VALUES</div>
+    <div class="kpi-row" style="margin-top:12px;">
+      <div class="kpi-card orange"><div class="kpi-label">WL Revenue</div><div class="kpi-value" id="cb-wlrev">€0</div></div>
+      <div class="kpi-card orange"><div class="kpi-label">WL Profit</div><div class="kpi-value" id="cb-wlp">€0</div></div>
+      <div class="kpi-card blue"><div class="kpi-label">PS Revenue</div><div class="kpi-value" id="cb-psrev">€0</div></div>
+      <div class="kpi-card blue"><div class="kpi-label">PS Profit</div><div class="kpi-value" id="cb-psp">€0</div></div>
+      <div class="kpi-card teal"><div class="kpi-label">Season Profit</div><div class="kpi-value" id="cb-tot">€0</div></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// ── CONSTANTS ──────────────────────────────────────────────────────────
+const WL_FIXED=7191,PS_FIXED=10294,WL_COMM=0.30,WL_COMM_BEV=0.35;
+const BOWL_VAT=0.13,MATE_VAT=0.23,WM_VAT=0.06;
+// From your Sheet13 exact values
+// Correct: WL net = (€14/1.13) × (1-0.30) - ingredient_cost
+// Ex-VAT: 12.389 | After 30% comm: 8.673
+const WL_NET={wm:7.169,bb:6.774,tofu:6.248,avg:6.730};
+// PS: no commission. Net = (€14/1.13) - ingredient_cost
+const PS_NET={wm:10.885,bb:10.490,tofu:9.964,avg:10.447};
+const VAR_COST=1.942; // avg ingredient cost per bowl
+const COLORS=['#B5F23D','#3BF2C8','#5B8EFF','#FF8C3B','#FFD93B','#FF5050','#C47BF5','#FF7BC4','#69D4A0'];
+let CH={};
+Chart.defaults.color='#7A8A6A';Chart.defaults.borderColor='rgba(255,255,255,0.06)';
+Chart.defaults.font.family="'DM Mono',monospace";Chart.defaults.font.size=11;
+const EUR=n=>'€'+Math.abs(n).toLocaleString('de-DE',{maximumFractionDigits:0});
+const pct=n=>(n*100).toFixed(1)+'%';
+function dc(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
+
+// Hourly data (aggregated WL2025)
+const HD={
+  0:{u:56,r:679,c:398.7},1:{u:38,r:421,c:230.8},2:{u:20,r:209.5,c:109.4},3:{u:1,r:12,c:7},
+  4:{u:0,r:0,c:0},5:{u:0,r:0,c:0},6:{u:0,r:0,c:0},7:{u:0,r:0,c:0},8:{u:0,r:0,c:0},9:{u:0,r:0,c:0},
+  10:{u:19,r:208,c:112.9},11:{u:109,r:1378.5,c:832.9},12:{u:113,r:1346.5,c:780.9},
+  13:{u:193,r:2413,c:1446.9},14:{u:246,r:2932,c:1700.9},15:{u:207,r:2553,c:1516.8},
+  16:{u:182,r:2072.5,c:1161.5},17:{u:253,r:2902,c:1635.6},18:{u:276,r:3060.5,c:1678.9},
+  19:{u:255,r:3088.5,c:1812.1},20:{u:254,r:3163.5,c:1892.1},21:{u:203,r:2521,c:1504.8},
+  22:{u:172,r:1968,c:1107},23:{u:91,r:1072,c:616.5}
+};
+const HRS=Array.from({length:24},(_,i)=>i);
+
+// ── WM PRICE TOGGLE ───────────────────────────────────────────────────
+let wmP=3.0;
+function setWM(p,btn){
+  wmP=p;
+  document.querySelectorAll('.pb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWM();
+}
+function renderWM(){
+  const p=wmP,cost=0.108;
+  const exVAT=p/(1+WM_VAT);
+  const comm=exVAT*WL_COMM;
+  const profit=exVAT-comm-cost;
+  const margin=profit/p;
+  const units50d=250;
+  const addedProfit=units50d*profit;
+  document.getElementById('wmPanel').innerHTML=`
+    <div class="cc">
+      <div class="ct" style="font-size:12px;">At €${p.toFixed(2)}/serving</div>
+      <div style="margin-top:10px;">
+        <div class="bem"><div class="bev" style="color:var(--teal)">€${profit.toFixed(2)}</div><div class="bel">Net profit/serving (WL)</div></div>
+        <table class="mt">
+          <tr><td class="rl">Selling price</td><td class="n">€${p.toFixed(2)}</td></tr>
+          <tr><td class="rl">ex. VAT (6%)</td><td class="n">€${exVAT.toFixed(3)}</td></tr>
+          <tr><td class="rl">— WL Commission 30%</td><td class="n" style="color:var(--red)">-€${comm.toFixed(3)}</td></tr>
+          <tr><td class="rl">— Ingredient cost</td><td class="n" style="color:var(--red)">-€${cost.toFixed(3)}</td></tr>
+          <tr><td class="rl">Net profit/serving</td><td class="n" style="color:var(--lime);font-weight:600">€${profit.toFixed(3)}</td></tr>
+          <tr><td class="rl">Net margin</td><td class="n" style="color:${margin>.4?'var(--lime)':'var(--yellow)'}">${pct(margin)}</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="ct" style="font-size:12px;">50 units/day × 5 days</div>
+      <div style="margin-top:10px;">
+        <div class="bem" style="border:1px solid rgba(181,242,61,.2);">
+          <div class="bev" style="color:var(--lime)">€${addedProfit.toFixed(0)}</div>
+          <div class="bel">Additional profit · ${units50d} servings</div>
+        </div>
+        <table class="mt">
+          <tr><td class="rl">Total units</td><td class="n">${units50d}</td></tr>
+          <tr><td class="rl">Gross revenue</td><td class="n">€${(units50d*p).toFixed(0)}</td></tr>
+          <tr><td class="rl">Costs + commission</td><td class="n" style="color:var(--red)">-€${(units50d*(comm+cost)).toFixed(0)}</td></tr>
+          <tr><td class="rl">Net added profit</td><td class="n" style="color:var(--lime)">€${addedProfit.toFixed(0)}</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="cc"><div class="ct" style="font-size:12px;">All Price Points</div><canvas id="wmMini" height="180"></canvas></div>`;
+  setTimeout(()=>{
+    dc('wmMini');
+    const prices=[1.5,2,2.5,3,3.5,4,5];
+    const profits=prices.map(pp=>{const ex=pp/(1+WM_VAT);return ex-ex*WL_COMM-cost;});
+    const margins=prices.map(pp=>{const ex=pp/(1+WM_VAT);return((ex-ex*WL_COMM-cost)/pp)*100;});
+    CH.wmMini=new Chart(document.getElementById('wmMini').getContext('2d'),{
+      type:'bar',
+      data:{labels:prices.map(p=>'€'+p),datasets:[
+        {label:'Net profit/serving',data:profits,backgroundColor:prices.map(pp=>pp===wmP?'#B5F23D':'rgba(181,242,61,0.3)'),borderRadius:3,yAxisID:'y'},
+        {label:'Net margin %',data:margins,type:'line',borderColor:'#3BF2C8',backgroundColor:'transparent',borderWidth:2,pointRadius:3,yAxisID:'y2'}
+      ]},
+      options:{responsive:true,plugins:{legend:{display:false}},scales:{
+        y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toFixed(2)}},
+        y2:{position:'right',ticks:{callback:v=>v.toFixed(0)+'%'},grid:{display:false}}
+      }}
+    });
+  },50);
+}
+
+// ── RESULTS CHARTS ────────────────────────────────────────────────────
+function drawResults(){
+  dc('hourlyChart');
+  CH.hourlyChart=new Chart(document.getElementById('hourlyChart').getContext('2d'),{
+    type:'bar',data:{labels:HRS.map(h=>h+'h'),datasets:[
+      {label:'Revenue (€)',data:HRS.map(h=>HD[h].r),backgroundColor:'rgba(91,142,255,0.3)',borderColor:'#5B8EFF',borderWidth:1,borderRadius:2},
+      {label:'Contribution (€)',data:HRS.map(h=>HD[h].c),backgroundColor:'rgba(181,242,61,0.5)',borderColor:'#B5F23D',borderWidth:1,borderRadius:2}
+    ]},
+    options:{responsive:true,plugins:{legend:{position:'top'},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.y.toFixed(0)}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'}}}}
+  });
+  dc('tramoDonut');
+  CH.tramoDonut=new Chart(document.getElementById('tramoDonut').getContext('2d'),{
+    type:'doughnut',data:{labels:['Valley','Mid','Peak'],datasets:[{data:[1735,6220,10591],backgroundColor:['#FF5050','#FFD93B','#B5F23D'],borderWidth:0}]},
+    options:{responsive:true,cutout:'65%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.toLocaleString()}}}}
+  });
+  dc('dailyChart');
+  const dr=[1532,4019,6454,7138,7428,5430];
+  CH.dailyChart=new Chart(document.getElementById('dailyChart').getContext('2d'),{
+    type:'bar',data:{labels:['Jun 18','Jun 19','Jun 20','Jun 21','Jun 22','Jun 23'],datasets:[{data:dr,backgroundColor:dr.map(v=>v===Math.max(...dr)?'#B5F23D':'rgba(181,242,61,0.3)'),borderColor:'#B5F23D',borderWidth:1,borderRadius:5}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.y.toLocaleString()}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'}}}}
+  });
+  // Heatmap
+  const hm=document.getElementById('heatmap');const hl=document.getElementById('heatmapL');
+  hm.innerHTML='';hl.innerHTML='';
+  const maxR=Math.max(...HRS.map(h=>HD[h].r));
+  HRS.forEach(h=>{
+    const d=HD[h];const i=d.r/maxR;const isPos=d.c>83;
+    const bg=d.r===0?'rgba(255,255,255,0.04)':isPos?`rgba(181,242,61,${0.1+i*0.85})`:`rgba(255,80,80,${0.15+i*0.5})`;
+    const cell=document.createElement('div');cell.className='hmc';cell.style.background=bg;
+    cell.style.color=i>0.5?'#0D0F0C':'#E8F0D8';cell.textContent=d.u||'';
+    cell.setAttribute('data-t',`${h}h · Rev:€${d.r.toFixed(0)} · ${d.u}u · Contrib:€${d.c.toFixed(0)}`);
+    hm.appendChild(cell);
+    const lb=document.createElement('div');lb.className='hmlc';lb.textContent=h;hl.appendChild(lb);
+  });
+  renderWM();
+}
+
+// ── COST CHARTS ───────────────────────────────────────────────────────
+function drawCosts(){
+  const bowlIngr=[
+    {n:'Bowl & Fork',v:0.195},{n:'Cooked Rice 240g',v:0.057},{n:'Red Cabbage Slaw',v:0.046},
+    {n:'Pico de Gallo 60g',v:0.149},{n:"Tiger's Milk 20ml",v:0.142},{n:'Sriracha Mayo 20g',v:0.093},
+    {n:'Sweet Potato 35g',v:0.130},{n:'Corn 25g',v:0.100},{n:'Cucumber 30g',v:0.060},{n:'Sesame Seeds 5g',v:0.029}
+  ];
+  dc('bowlDonut');
+  CH.bowlDonut=new Chart(document.getElementById('bowlDonut').getContext('2d'),{
+    type:'doughnut',data:{labels:bowlIngr.map(i=>i.n),datasets:[{data:bowlIngr.map(i=>i.v),backgroundColor:COLORS,borderWidth:0}]},
+    options:{responsive:true,cutout:'58%',plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:9,padding:5}},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.toFixed(3)}}}}
+  });
+  dc('proteinBar');
+  CH.proteinBar=new Chart(document.getElementById('proteinBar').getContext('2d'),{
+    type:'bar',
+    data:{labels:['Watermelon','Black Bean','Tofu','Average'],datasets:[
+      {label:'WL net profit/bowl',data:[WL_NET.wm,WL_NET.bb,WL_NET.tofu,WL_NET.avg],backgroundColor:'rgba(255,140,59,0.7)',borderColor:'#FF8C3B',borderWidth:1,borderRadius:4},
+      {label:'PS net profit/bowl',data:[PS_NET.wm,PS_NET.bb,PS_NET.tofu,PS_NET.avg],backgroundColor:'rgba(91,142,255,0.7)',borderColor:'#5B8EFF',borderWidth:1,borderRadius:4}
+    ]},
+    options:{responsive:true,plugins:{legend:{position:'top'},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v}}}}
+  });
+  dc('fixedBar');
+  CH.fixedBar=new Chart(document.getElementById('fixedBar').getContext('2d'),{
+    type:'bar',data:{labels:['Food Truck','Setup / Venue','Staff'],datasets:[{data:[891,3300,3000],backgroundColor:['rgba(255,80,80,0.6)','rgba(255,140,59,0.6)','rgba(91,142,255,0.6)'],borderColor:['#FF5050','#FF8C3B','#5B8EFF'],borderWidth:1,borderRadius:5}]},
+    options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.x.toLocaleString()}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'}},y:{grid:{display:false}}}}
+  });
+  // Why tofu
+  dc('whyTofu');
+  CH.whyTofu=new Chart(document.getElementById('whyTofu').getContext('2d'),{
+    type:'bar',
+    data:{labels:['Watermelon','Black Bean','Tofu'],datasets:[
+      {label:'Ingredient Cost',data:[1.504,1.899,2.425],backgroundColor:'rgba(255,80,80,0.5)',stack:'a',borderRadius:2},
+      {label:'WL Commission/bowl (est.)',data:[1.712,1.712,1.712],backgroundColor:'rgba(255,140,59,0.5)',stack:'a',borderRadius:2},
+      {label:'Net Profit (WL)',data:[WL_NET.wm,WL_NET.bb,WL_NET.tofu],backgroundColor:['rgba(181,242,61,0.85)','rgba(181,242,61,0.4)','rgba(181,242,61,0.4)'],stack:'a',borderRadius:2}
+    ]},
+    options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v}}}}
+  });
+}
+
+// ── PROJECTION CHARTS ─────────────────────────────────────────────────
+function wlProfit(b,p=14){const ex=p/(1+BOWL_VAT);return b*(ex*(1-WL_COMM)-VAR_COST)-WL_FIXED;}
+function psProfit(b,p=14){const ex=p/(1+BOWL_VAT);return b*(ex-VAR_COST)-PS_FIXED;}
+function drawProj(){
+  const rng=[500,1000,1500,2000,2200,2500,2688,3000,3500,4000];
+  const wlP=rng.map(b=>wlProfit(b));
+  const psP=rng.map(b=>psProfit(b));
+
+  dc('wlProj');
+  CH.wlProj=new Chart(document.getElementById('wlProj').getContext('2d'),{
+    type:'line',data:{labels:rng.map(b=>b.toLocaleString()),datasets:[{
+      label:'WL Net Profit',data:wlP,borderColor:'#FF8C3B',backgroundColor:'rgba(255,140,59,0.1)',fill:true,tension:0.4,
+      pointRadius:wlP.map((_,i)=>rng[i]===2688?8:3),
+      pointBackgroundColor:wlP.map((p,i)=>rng[i]===2688?'#B5F23D':p>=0?'#FF8C3B':'#FF5050'),borderWidth:2
+    }]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.y.toLocaleString()}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}}
+  });
+
+  // WL Table
+  const wlT=document.getElementById('wlTable');
+  wlT.innerHTML='<thead><tr><th>Bowls</th><th class="n">Net Profit</th><th class="n">Margin</th></tr></thead>';
+  let b='<tbody>';
+  [1000,1500,2000,2200,2688,3000,3500,4000].forEach(bw=>{
+    const p=wlProfit(bw),m=p/(bw*14),isBas=bw===2688;
+    b+=`<tr style="${isBas?'background:rgba(181,242,61,0.06);':''}"><td>${bw.toLocaleString()}${isBas?' ★':''}</td>
+      <td class="n" style="color:${p>=0?'var(--lime)':'var(--red)'}">${(p<0?'-':'')+EUR(p)}</td>
+      <td class="n" style="color:${m>=0?'var(--teal)':'var(--red)'}">${pct(m)}</td></tr>`;
+  });
+  wlT.innerHTML+=b+'</tbody>';
+
+  dc('psProj');
+  CH.psProj=new Chart(document.getElementById('psProj').getContext('2d'),{
+    type:'line',data:{labels:rng.map(b=>b.toLocaleString()),datasets:[{
+      label:'PS Net Profit',data:psP,borderColor:'#5B8EFF',backgroundColor:'rgba(91,142,255,0.1)',fill:true,tension:0.4,
+      pointRadius:psP.map((_,i)=>rng[i]===2500?8:3),
+      pointBackgroundColor:psP.map(p=>p>=0?'#5B8EFF':'#FF5050'),borderWidth:2
+    }]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.y.toLocaleString()}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}}
+  });
+
+  const psT=document.getElementById('psTable');
+  psT.innerHTML='<thead><tr><th>Bowls</th><th class="n">Net Profit</th><th class="n">Margin</th></tr></thead>';
+  let pb='<tbody>';
+  [1000,1500,2000,2500,3000,3500,4000].forEach(bw=>{
+    const p=psProfit(bw),m=p/(bw*14);
+    pb+=`<tr><td>${bw.toLocaleString()}</td>
+      <td class="n" style="color:${p>=0?'var(--lime)':'var(--red)'}">${(p<0?'-':'')+EUR(p)}</td>
+      <td class="n" style="color:${m>=0?'var(--teal)':'var(--red)'}">${pct(m)}</td></tr>`;
+  });
+  psT.innerHTML+=pb+'</tbody>';
+  document.getElementById('psKPI').textContent=EUR(psProfit(2500));
+
+  dc('combined');
+  const sc=[1000,1500,2000,2500,3000,3500];
+  CH.combined=new Chart(document.getElementById('combined').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:sc.map(b=>`${b.toLocaleString()}/fest (${(b*2).toLocaleString()} total)`),
+      datasets:[
+        {label:'WL Profit',data:sc.map(b=>wlProfit(b)),backgroundColor:'rgba(255,140,59,0.6)',borderColor:'#FF8C3B',borderWidth:1,borderRadius:3},
+        {label:'PS Profit',data:sc.map(b=>psProfit(b)),backgroundColor:'rgba(91,142,255,0.6)',borderColor:'#5B8EFF',borderWidth:1,borderRadius:3},
+        {label:'Combined (both festivals)',data:sc.map(b=>wlProfit(b)+psProfit(b)),type:'line',borderColor:'#B5F23D',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#B5F23D'}
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{position:'top'},
+        tooltip:{callbacks:{
+          label:ctx=>{
+            if(ctx.dataset.label.startsWith('Combined')){
+              const b=sc[ctx.dataIndex];
+              return `Combined (${(b*2).toLocaleString()} bowls total): €${ctx.parsed.y.toLocaleString()}`;
+            }
+            return ctx.dataset.label+': €'+ctx.parsed.y.toLocaleString();
+          }
+        }}
+      },
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}
+    }
+  });
+}
+
+// ── SCENARIO BUILDER ──────────────────────────────────────────────────
+let wlProd={mate:true,wm:true,jal:true,ep:true};
+let psProd={wm:true,jal:true,ep:true};
+let _wlP=0,_psP=0,_wlR=0,_psR=0;
+
+function tWL(p){wlProd[p]=!wlProd[p];document.getElementById('wl-c-'+p).classList.toggle('on',wlProd[p]);updWL();}
+function tPS(p){psProd[p]=!psProd[p];document.getElementById('ps-c-'+p).classList.toggle('on',psProd[p]);updPS();}
+
+function calcFest(o){
+  const {bowls,price,days,comm,commBev,useMate,mateRate,useWM,wmDay,wmP2,useJal,jalRate,useEP,epRate,staff,fix,isWL}=o;
+  const exVAT=price/(1+BOWL_VAT);
+  const bowlComm=isWL?bowls*exVAT*comm:0;
+  const bowlIngr=bowls*VAR_COST;
+  const bowlRev=bowls*exVAT;
+  let mR=0,mC=0,mI=0;
+  if(useMate&&isWL){const u=bowls*mateRate;const me=5/(1+MATE_VAT);mR=u*5;mC=u*me*commBev;mI=u*1.17;}
+  let wR=0,wC=0,wI=0;
+  if(useWM){const u=wmDay*days;const we=wmP2/(1+WM_VAT);wR=u*wmP2;wC=isWL?u*we*comm:0;wI=u*0.108;}
+  let jR=0;if(useJal)jR=bowls*jalRate*1;
+  let eR=0,eI=0;if(useEP){eR=bowls*epRate*1.5;eI=bowls*epRate*0.7;}
+  const totalRev=bowlRev+mR+wR+jR+eR;
+  const totalComm=bowlComm+mC+wC;
+  const totalIngr=bowlIngr+mI+wI+eI;
+  const fixed=staff+fix;
+  const contrib=totalRev-totalComm-totalIngr;
+  const profit=contrib-fixed;
+  const cpb=exVAT*(1-comm)-VAR_COST;
+  const be=cpb>0?Math.ceil(fixed/cpb):Infinity;
+  return {bowlRev,mR,wR,jR,eR,totalRev,totalComm,totalIngr,fixed,contrib,profit,be};
+}
+
+function setRV(id,v,cls=''){const el=document.getElementById(id);if(el){el.textContent=v;if(cls)el.className='rv '+cls;}}
+function renderR(pfx,r,prod,isWL){
+  const fmt=v=>(v<0?'-':'')+EUR(v);
+  setRV(pfx+'-brev',EUR(r.bowlRev));
+  if(isWL)setRV('wr-mrev',prod.mate?EUR(r.mR):'—',prod.mate?'b':'');
+  setRV(pfx+(isWL?'-wmrev':'r-wmrev')||pfx+'-wmrev', (isWL?prod.wm:prod.wm)?EUR(r.wR):'—');
+  setRV(pfx+'-jrev',(isWL?prod.jal:prod.jal)?EUR(r.jR):'—');
+  setRV(pfx+'-eprev',(isWL?prod.ep:prod.ep)?EUR(r.eR):'—');
+  setRV(pfx+'-trev',EUR(r.totalRev));
+  if(isWL)setRV('wr-comm','-'+EUR(r.totalComm));
+  setRV(pfx+'-ingr','-'+EUR(r.totalIngr));
+  setRV(pfx+'-contrib',EUR(r.contrib),'t');
+  setRV(pfx+'-fixed','-'+EUR(r.fixed));
+  const pEl=document.getElementById(pfx+'-profit');
+  if(pEl){pEl.textContent=fmt(r.profit);pEl.className='rv '+(r.profit>=0?'g':'r');}
+  const mEl=document.getElementById(pfx+'-margin');
+  if(mEl){const m=r.profit/r.totalRev;mEl.textContent=pct(m);mEl.className='rv '+(m>=0?'g':'r');}
+  const beEl=document.getElementById(pfx+'-be');
+  const bowls=isWL?+document.getElementById('ws-bowls').value:+document.getElementById('ps-bowls').value;
+  if(beEl){beEl.textContent=isFinite(r.be)?r.be.toLocaleString()+' bowls':'∞';beEl.className='rv '+(bowls>=r.be?'g':'o');}
+}
+
+function drawWfall(cid,r,isWL){
+  dc(cid);
+  const other=r.mR+r.wR+r.jR+r.eR;
+  const labels=isWL?['Bowl Rev','+ Others','- Comm','- Ingr','- Fixed','Profit']:['Bowl Rev','+ Others','- Ingr','- Fixed','Profit'];
+  const vals=isWL?[r.bowlRev,other,-r.totalComm,-r.totalIngr,-r.fixed,r.profit]:[r.bowlRev,other,-r.totalIngr,-r.fixed,r.profit];
+  const cls=isWL?['#5B8EFF','#3BF2C8','#FF5050','#FF8C3B','#FFD93B',r.profit>=0?'#B5F23D':'#FF5050']:['#5B8EFF','#3BF2C8','#FF8C3B','#FFD93B',r.profit>=0?'#B5F23D':'#FF5050'];
+  CH[cid]=new Chart(document.getElementById(cid).getContext('2d'),{
+    type:'bar',data:{labels,datasets:[{data:vals.map(Math.abs),backgroundColor:cls.map(c=>c+'99'),borderColor:cls,borderWidth:1,borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const v=vals[ctx.dataIndex];return (v<0?'-':'')+EUR(Math.abs(v));}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}}
+  });
+}
+
+function updWL(){
+  const bowls=+document.getElementById('ws-bowls').value;
+  const price=+document.getElementById('ws-price').value;
+  const days=+document.getElementById('ws-days').value;
+  const mateRate=document.getElementById('ws-mate').value/100;
+  const wmDay=+document.getElementById('ws-wm').value;
+  const wmP2=+document.getElementById('ws-wmp').value;
+  const jalRate=document.getElementById('ws-jal').value/100;
+  const epRate=document.getElementById('ws-ep').value/100;
+  const staff=+document.getElementById('ws-staff').value;
+  const fix=+document.getElementById('ws-fix').value;
+  document.getElementById('wv-bowls').textContent=bowls.toLocaleString();
+  document.getElementById('wv-price').textContent=price.toFixed(2);
+  document.getElementById('wv-days').textContent=days;
+  document.getElementById('wv-mate').textContent=(mateRate*100).toFixed(0)+'%';
+  document.getElementById('wv-wm').textContent=wmDay;
+  document.getElementById('wv-wmp').textContent='€'+wmP2.toFixed(2);
+  document.getElementById('wv-jal').textContent=(jalRate*100).toFixed(0)+'%';
+  document.getElementById('wv-ep').textContent=(epRate*100).toFixed(0)+'%';
+  document.getElementById('wv-staff').textContent='€'+staff.toLocaleString();
+  document.getElementById('wv-fix').textContent='€'+fix.toLocaleString();
+  const r=calcFest({bowls,price,days,comm:WL_COMM,commBev:WL_COMM_BEV,useMate:wlProd.mate,mateRate,useWM:wlProd.wm,wmDay,wmP2,useJal:wlProd.jal,jalRate,useEP:wlProd.ep,epRate,staff,fix,isWL:true});
+  renderR('wr',r,wlProd,true);
+  drawWfall('wlWfall',r,true);
+  _wlP=r.profit;_wlR=r.totalRev;updComb();
+}
+
+function updPS(){
+  const bowls=+document.getElementById('ps-bowls').value;
+  const price=+document.getElementById('ps-price').value;
+  const days=+document.getElementById('ps-days').value;
+  const wmDay=+document.getElementById('ps-wm').value;
+  const wmP2=+document.getElementById('ps-wmp').value;
+  const jalRate=document.getElementById('ps-jal').value/100;
+  const epRate=document.getElementById('ps-ep').value/100;
+  const staff=+document.getElementById('ps-staff').value;
+  const fix=+document.getElementById('ps-fix').value;
+  document.getElementById('pv-bowls').textContent=bowls.toLocaleString();
+  document.getElementById('pv-price').textContent=price.toFixed(2);
+  document.getElementById('pv-days').textContent=days;
+  document.getElementById('pv-wm').textContent=wmDay;
+  document.getElementById('pv-wmp').textContent='€'+wmP2.toFixed(2);
+  document.getElementById('pv-jal').textContent=(jalRate*100).toFixed(0)+'%';
+  document.getElementById('pv-ep').textContent=(epRate*100).toFixed(0)+'%';
+  document.getElementById('pv-staff').textContent='€'+staff.toLocaleString();
+  document.getElementById('pv-fix').textContent='€'+fix.toLocaleString();
+  const r=calcFest({bowls,price,days,comm:0,commBev:0,useMate:false,mateRate:0,useWM:psProd.wm,wmDay,wmP2,useJal:psProd.jal,jalRate,useEP:psProd.ep,epRate,staff,fix,isWL:false});
+  // PS result panel uses pr- prefix
+  document.getElementById('pr-brev').textContent=EUR(r.bowlRev);
+  document.getElementById('pr-wmrev').textContent=psProd.wm?EUR(r.wR):'—';
+  document.getElementById('pr-jrev').textContent=psProd.jal?EUR(r.jR):'—';
+  document.getElementById('pr-eprev').textContent=psProd.ep?EUR(r.eR):'—';
+  document.getElementById('pr-trev').textContent=EUR(r.totalRev);
+  document.getElementById('pr-ingr').textContent='-'+EUR(r.totalIngr);
+  document.getElementById('pr-contrib').textContent=EUR(r.contrib);
+  document.getElementById('pr-fixed').textContent='-'+EUR(r.fixed);
+  const pEl=document.getElementById('pr-profit');pEl.textContent=(r.profit<0?'-':'')+EUR(r.profit);pEl.className='rv '+(r.profit>=0?'g':'r');
+  const mEl=document.getElementById('pr-margin');const m=r.profit/r.totalRev;mEl.textContent=pct(m);mEl.className='rv '+(m>=0?'g':'r');
+  const beEl=document.getElementById('pr-be');beEl.textContent=isFinite(r.be)?r.be.toLocaleString()+' bowls':'∞';beEl.className='rv '+(bowls>=r.be?'g':'o');
+  drawWfall('psWfall',r,false);
+  _psP=r.profit;_psR=r.totalRev;updComb();
+}
+
+function updComb(){
+  const fv=v=>{const el=document.createElement('span');el.style.color=v>=0?'var(--lime)':'var(--red)';el.textContent=(v<0?'-':'')+EUR(v);return el.outerHTML;};
+  document.getElementById('cb-wlrev').textContent=EUR(_wlR);
+  document.getElementById('cb-psrev').textContent=EUR(_psR);
+  document.getElementById('cb-wlp').innerHTML=fv(_wlP);
+  document.getElementById('cb-psp').innerHTML=fv(_psP);
+  document.getElementById('cb-tot').innerHTML=fv(_wlP+_psP);
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='results')drawResults();
+  if(id==='costs')drawCosts();
+  if(id==='proj')drawProj();
+  if(id==='scenario'){updWL();updPS();}
+}
+
+// Init
+drawResults();
+</script>
+</body>
+</html>
