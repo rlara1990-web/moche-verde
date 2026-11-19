@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moche Verde · Festival Dashboard 2026</title>
+<title>Moche Verde · Festival Dashboard 2027</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
   :root {
@@ -82,6 +82,19 @@
   .pb{padding:5px 11px;border-radius:8px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;border:1px solid var(--border2);background:var(--dark3);color:var(--muted);transition:all .2s;}
   .pb.active{background:rgba(59,242,200,.15);border-color:var(--teal);color:var(--teal);}
   .sc2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .pj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px;}
+  .pj-grid .fp{margin-bottom:0;}
+  .pj-off{opacity:.45;}
+  .pj-ins{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+  .pj-ins label{display:flex;flex-direction:column;gap:3px;}
+  .pj-in{width:100%;background:var(--dark3);border:1px solid var(--border2);border-radius:8px;padding:6px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;}
+  .pj-in:focus{outline:none;border-color:var(--lime);}
+  .pj-flag{font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(255,217,59,.15);color:var(--yellow);}
+  .pj-hint{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:1.5;margin-top:10px;}
+  .pj-on{margin-left:auto;display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);cursor:pointer;}
+  .pj-sv{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;color:var(--lime);text-align:right;}
+  @media(max-width:900px){.pj-grid{grid-template-columns:1fr;}}
+  .note{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin:-6px 0 14px;line-height:1.5;}
   @media(max-width:1200px){.kpi-row{grid-template-columns:repeat(3,1fr);}.g3{grid-template-columns:1fr 1fr;}}
   @media(max-width:900px){main{padding:12px;}.kpi-row{grid-template-columns:1fr 1fr;}.g2,.g31,.sc2{grid-template-columns:1fr;}}
   @media(max-width:600px){
@@ -117,7 +130,7 @@
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">MOCHE VERDE</div>
-    <div class="login-sub">· Festival Dashboard 2026 ·</div>
+    <div class="login-sub">· Festival Dashboard 2027 ·</div>
     <input class="login-input" type="password" id="pw-input" placeholder="••••" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">Enter</button>
     <div class="login-error" id="pw-error"></div>
@@ -141,12 +154,11 @@ function doLogin(){
 }
 </script>
 <header class="header">
-  <div class="logo">MOCHE VERDE <span>· 2026 Dashboard</span></div>
+  <div class="logo">MOCHE VERDE <span>· 2027 Dashboard</span></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showTab('results',this)">2025 Results</button>
     <button class="nav-tab" onclick="showTab('costs',this)">Bowl Costs</button>
-    <button class="nav-tab" onclick="showTab('proj',this)">2026 Projections</button>
-    <button class="nav-tab" onclick="showTab('scenario',this)">Scenario Builder</button>
+    <button class="nav-tab" onclick="showTab('proj',this)">2027 Projector</button>
   </div>
   <a class="header-link" href="moche_verde_groceries.html">🛒 Groceries</a>
 </header>
@@ -252,132 +264,20 @@ function doLogin(){
   </div>
 </div>
 
-<!-- ══ TAB 3: PROJECTIONS ══ -->
+<!-- ══ TAB 3: 2027 PROJECTOR ══ -->
 <div id="proj" class="section">
-  <div class="sh"><h2>2026 Festival Projections</h2><div class="ln"></div><div class="stag">Separate fixed cost structures</div></div>
-
-  <div class="fp">
-    <div class="fh"><div class="fd" style="background:var(--orange);"></div><div class="fn" style="color:var(--orange);">🎪 Waking Life</div><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto;">Commission 30% on net price · Fixed: €7,191</span></div>
-    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
-      <div class="kpi-card orange"><div class="kpi-label">WL Fixed Costs</div><div class="kpi-value">€7,191</div><div class="kpi-sub">truck+setup+staff</div></div>
-      <div class="kpi-card"><div class="kpi-label">Break-Even (avg)</div><div class="kpi-value">983</div><div class="kpi-sub">bowls needed</div></div>
-      <div class="kpi-card teal"><div class="kpi-label">2025 Actual Profit</div><div class="kpi-value">€12,057</div><div class="kpi-sub">at ~2,688 bowls</div></div>
-      <div class="kpi-card"><div class="kpi-label">Best Protein (WL)</div><div class="kpi-value">Watermelon</div><div class="kpi-sub">€7.17 net/bowl</div></div>
-    </div>
-    <div class="g2">
-      <div class="cc"><div class="ct">WL Profit vs Bowl Volume</div><div class="cs">PRICE €14 · 13% VAT · 30% COMMISSION ON NET</div><canvas id="wlProj" height="190"></canvas></div>
-      <div class="cc"><div class="ct">WL Scenario Table</div><div class="cs">NET PROFIT BY VOLUME · ★ = 2025 BASELINE</div><table class="mt" style="margin-top:8px;" id="wlTable"></table></div>
-    </div>
+  <div class="sh"><h2>2027 Projector</h2><div class="ln"></div><div class="stag">Baseline: 2026 actuals (ERP)</div></div>
+  <div class="note">Each event starts from its 2026 result. The price lever is the average gross price per bowl, protein included. Produce cost is the only cost that moves with bowls; staff, truck, transport and setup are fixed per event, and shared overhead is the share allocated to each event in 2026. Margins are before any payout to the partners. At zero change, every event reproduces its 2026 operating margin within about €5.</div>
+  <div class="kpi-row" id="pj-kpis" style="grid-template-columns:repeat(4,1fr);"></div>
+  <div class="cc" style="margin-bottom:12px;">
+    <div class="sg" style="margin-bottom:6px;"><div class="sr"><span class="sl">Price elasticity of demand</span><span class="sv" id="pj-eps-v">-0.8</span></div><input type="range" id="pj-eps" min="-2" max="0" step="0.1" value="-0.8" oninput="pjUpdate()"></div>
+    <div class="cs" style="margin-bottom:0;">NO PRICE TEST HAS BEEN RUN YET, SO THIS IS AN ASSUMPTION. AT -0.8, A 10% HIGHER PRICE LOSES ABOUT 7.5% OF BOWLS. EACH CARD ALSO SHOWS THE VOLUME LOSS AT WHICH A PRICE CHANGE STOPS PAYING, WHICH DOES NOT DEPEND ON THIS ASSUMPTION.</div>
   </div>
-
-  <div class="fp">
-    <div class="fh"><div class="fd" style="background:var(--blue);"></div><div class="fn" style="color:var(--blue);">🎵 Primavera Sound Porto</div><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto;">Fixed fee €5,500 included in €10,294 total fixed</span></div>
-    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
-      <div class="kpi-card blue"><div class="kpi-label">PS Fixed Costs</div><div class="kpi-value">€10,294</div><div class="kpi-sub">fee+truck+setup+staff</div></div>
-      <div class="kpi-card"><div class="kpi-label">Break-Even (avg)</div><div class="kpi-value">937</div><div class="kpi-sub">bowls needed</div></div>
-      <div class="kpi-card teal"><div class="kpi-label">Projected (2,500 bowls)</div><div class="kpi-value" id="psKPI">—</div><div class="kpi-sub">profit estimate</div></div>
-      <div class="kpi-card"><div class="kpi-label">Best Protein (PS)</div><div class="kpi-value">Watermelon</div><div class="kpi-sub">€10.89 net/bowl</div></div>
-    </div>
-    <div class="g2">
-      <div class="cc"><div class="ct">PS Profit vs Bowl Volume</div><div class="cs">PRICE €14 · NO COMMISSION — FIXED FEE MODEL</div><canvas id="psProj" height="190"></canvas></div>
-      <div class="cc"><div class="ct">PS Scenario Table</div><div class="cs">NET PROFIT BY VOLUME</div><table class="mt" style="margin-top:8px;" id="psTable"></table></div>
-    </div>
-  </div>
-
-  <div class="cc"><div class="ct">Combined Season — WL + Primavera Sound</div><div class="cs">BOTH FESTIVALS · SEPARATE FIXED COST STRUCTURES</div><canvas id="combined" height="150"></canvas></div>
-</div>
-
-<!-- ══ TAB 4: SCENARIO BUILDER ══ -->
-<div id="scenario" class="section">
-  <div class="sh"><h2>Scenario Builder</h2><div class="ln"></div><div class="stag">Independent controls per festival</div></div>
-  <div class="sc2">
-
-    <!-- WL -->
-    <div class="fp">
-      <div class="fh"><div class="fd" style="background:var(--orange);"></div><div class="fn" style="color:var(--orange);">🎪 Waking Life</div></div>
-      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.06em;">PRODUCTS</div>
-      <div class="trow">
-        <div class="chip on" id="wl-c-mate" onclick="tWL('mate')">🧉 Club Mate</div>
-        <div class="chip on" id="wl-c-wm" onclick="tWL('wm')">🍉 Watermelon</div>
-        <div class="chip on" id="wl-c-jal" onclick="tWL('jal')">🌶️ Jalapeño</div>
-        <div class="chip on" id="wl-c-ep" onclick="tWL('ep')">💪 Extra Protein</div>
-      </div>
-      <div class="sg"><div class="sr"><span class="sl">🍜 Bowls sold</span><span class="sv" id="wv-bowls">2,688</span></div><input type="range" min="500" max="5000" step="50" value="2688" oninput="updWL()" id="ws-bowls"></div>
-      <div class="sg"><div class="sr"><span class="sl">💰 Bowl price (€)</span><span class="sv" id="wv-price">14.00</span></div><input type="range" min="10" max="18" step=".5" value="14" oninput="updWL()" id="ws-price"></div>
-      <div class="sg"><div class="sr"><span class="sl">📅 Festival days</span><span class="sv" id="wv-days">5</span></div><input type="range" min="1" max="7" step="1" value="5" oninput="updWL()" id="ws-days"></div>
-      <div class="sg"><div class="sr"><span class="sl">🧉 Mate attachment rate</span><span class="sv" id="wv-mate">15%</span></div><input type="range" min="0" max="60" step="1" value="15" oninput="updWL()" id="ws-mate"></div>
-      <div class="sg"><div class="sr"><span class="sl">🍉 Watermelon units/day</span><span class="sv" id="wv-wm">50</span></div><input type="range" min="0" max="300" step="10" value="50" oninput="updWL()" id="ws-wm"></div>
-      <div class="sg"><div class="sr"><span class="sl">🍉 Watermelon price (€)</span><span class="sv" id="wv-wmp">€3.00</span></div><input type="range" min="1.5" max="6" step=".5" value="3" oninput="updWL()" id="ws-wmp"></div>
-      <div class="sg"><div class="sr"><span class="sl">🌶️ Jalapeño attachment</span><span class="sv" id="wv-jal">20%</span></div><input type="range" min="0" max="60" step="1" value="20" oninput="updWL()" id="ws-jal"></div>
-      <div class="sg"><div class="sr"><span class="sl">💪 Extra protein attach.</span><span class="sv" id="wv-ep">10%</span></div><input type="range" min="0" max="40" step="1" value="10" oninput="updWL()" id="ws-ep"></div>
-      <div class="sg"><div class="sr"><span class="sl">👥 Staff cost (€)</span><span class="sv" id="wv-staff">€3,000</span></div><input type="range" min="1000" max="8000" step="100" value="3000" oninput="updWL()" id="ws-staff"></div>
-      <div class="sg"><div class="sr"><span class="sl">🏗️ Other fixed (€)</span><span class="sv" id="wv-fix">€4,191</span></div><input type="range" min="500" max="8000" step="100" value="4191" oninput="updWL()" id="ws-fix"></div>
-      <div class="rp" style="margin-top:14px;">
-        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--orange);margin-bottom:8px;">Waking Life — Result</div>
-        <div class="rr"><span class="rl">Bowl Revenue</span><span class="rv g" id="wr-brev">€0</span></div>
-        <div class="rr"><span class="rl">Club Mate</span><span class="rv b" id="wr-mrev">—</span></div>
-        <div class="rr"><span class="rl">Watermelon</span><span class="rv t" id="wr-wmrev">—</span></div>
-        <div class="rr"><span class="rl">Jalapeño</span><span class="rv" id="wr-jrev">—</span></div>
-        <div class="rr"><span class="rl">Extra Protein</span><span class="rv" id="wr-eprev">—</span></div>
-        <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);">Total Revenue</span><span class="rv g" id="wr-trev" style="font-size:17px;">€0</span></div>
-        <div class="rr"><span class="rl">— Commission (30%)</span><span class="rv r" id="wr-comm">€0</span></div>
-        <div class="rr"><span class="rl">— Ingredients</span><span class="rv r" id="wr-ingr">€0</span></div>
-        <div class="rr"><span class="rl">Gross Contribution</span><span class="rv t" id="wr-contrib">€0</span></div>
-        <div class="rr"><span class="rl">— Fixed Costs</span><span class="rv o" id="wr-fixed">€0</span></div>
-        <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);font-weight:500;">NET PROFIT</span><span class="rv" id="wr-profit" style="font-size:20px;">€0</span></div>
-        <div class="rr"><span class="rl">Margin</span><span class="rv" id="wr-margin">0%</span></div>
-        <div class="rr"><span class="rl">Break-Even</span><span class="rv" id="wr-be">0</span></div>
-      </div>
-      <div class="cc" style="margin-top:10px;padding:14px;"><div class="ct" style="font-size:12px;">WL Waterfall</div><canvas id="wlWfall" height="170"></canvas></div>
-    </div>
-
-    <!-- PS -->
-    <div class="fp">
-      <div class="fh"><div class="fd" style="background:var(--blue);"></div><div class="fn" style="color:var(--blue);">🎵 Primavera Sound Porto</div></div>
-      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.06em;">PRODUCTS</div>
-      <div class="trow">
-        <div class="chip on" id="ps-c-wm" onclick="tPS('wm')">🍉 Watermelon</div>
-        <div class="chip on" id="ps-c-jal" onclick="tPS('jal')">🌶️ Jalapeño</div>
-        <div class="chip on" id="ps-c-ep" onclick="tPS('ep')">💪 Extra Protein</div>
-        <div class="chip" style="opacity:.4;cursor:not-allowed;">🚫 No Mate</div>
-      </div>
-      <div class="sg"><div class="sr"><span class="sl">🍜 Bowls sold</span><span class="sv" id="pv-bowls">2,500</span></div><input type="range" min="500" max="5000" step="50" value="2500" oninput="updPS()" id="ps-bowls"></div>
-      <div class="sg"><div class="sr"><span class="sl">💰 Bowl price (€)</span><span class="sv" id="pv-price">14.00</span></div><input type="range" min="10" max="18" step=".5" value="14" oninput="updPS()" id="ps-price"></div>
-      <div class="sg"><div class="sr"><span class="sl">📅 Festival days</span><span class="sv" id="pv-days">4</span></div><input type="range" min="1" max="7" step="1" value="4" oninput="updPS()" id="ps-days"></div>
-      <div class="sg"><div class="sr"><span class="sl">🍉 Watermelon units/day</span><span class="sv" id="pv-wm">50</span></div><input type="range" min="0" max="300" step="10" value="50" oninput="updPS()" id="ps-wm"></div>
-      <div class="sg"><div class="sr"><span class="sl">🍉 Watermelon price (€)</span><span class="sv" id="pv-wmp">€3.00</span></div><input type="range" min="1.5" max="6" step=".5" value="3" oninput="updPS()" id="ps-wmp"></div>
-      <div class="sg"><div class="sr"><span class="sl">🌶️ Jalapeño attachment</span><span class="sv" id="pv-jal">20%</span></div><input type="range" min="0" max="60" step="1" value="20" oninput="updPS()" id="ps-jal"></div>
-      <div class="sg"><div class="sr"><span class="sl">💪 Extra protein attach.</span><span class="sv" id="pv-ep">10%</span></div><input type="range" min="0" max="40" step="1" value="10" oninput="updPS()" id="ps-ep"></div>
-      <div class="sg"><div class="sr"><span class="sl">👥 Staff cost (€)</span><span class="sv" id="pv-staff">€2,000</span></div><input type="range" min="1000" max="8000" step="100" value="2000" oninput="updPS()" id="ps-staff"></div>
-      <div class="sg"><div class="sr"><span class="sl">🏗️ Other fixed (€)</span><span class="sv" id="pv-fix">€8,294</span></div><input type="range" min="500" max="15000" step="100" value="8294" oninput="updPS()" id="ps-fix"></div>
-      <div class="rp" style="margin-top:14px;">
-        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--blue);margin-bottom:8px;">Primavera Sound — Result</div>
-        <div class="rr"><span class="rl">Bowl Revenue</span><span class="rv g" id="pr-brev">€0</span></div>
-        <div class="rr"><span class="rl">Watermelon</span><span class="rv t" id="pr-wmrev">—</span></div>
-        <div class="rr"><span class="rl">Jalapeño</span><span class="rv" id="pr-jrev">—</span></div>
-        <div class="rr"><span class="rl">Extra Protein</span><span class="rv" id="pr-eprev">—</span></div>
-        <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);">Total Revenue</span><span class="rv g" id="pr-trev" style="font-size:17px;">€0</span></div>
-        <div class="rr"><span class="rl">— Ingredients</span><span class="rv r" id="pr-ingr">€0</span></div>
-        <div class="rr"><span class="rl">Gross Contribution</span><span class="rv t" id="pr-contrib">€0</span></div>
-        <div class="rr"><span class="rl">— Fixed (incl. €5,500 fee)</span><span class="rv o" id="pr-fixed">€0</span></div>
-        <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);font-weight:500;">NET PROFIT</span><span class="rv" id="pr-profit" style="font-size:20px;">€0</span></div>
-        <div class="rr"><span class="rl">Margin</span><span class="rv" id="pr-margin">0%</span></div>
-        <div class="rr"><span class="rl">Break-Even</span><span class="rv" id="pr-be">0</span></div>
-      </div>
-      <div class="cc" style="margin-top:10px;padding:14px;"><div class="ct" style="font-size:12px;">PS Waterfall</div><canvas id="psWfall" height="170"></canvas></div>
-    </div>
-  </div>
-
-  <!-- Combined -->
-  <div class="cc" style="margin-top:12px;">
-    <div class="ct">Combined Season</div><div class="cs">BASED ON CURRENT SLIDER VALUES</div>
-    <div class="kpi-row" style="margin-top:12px;">
-      <div class="kpi-card orange"><div class="kpi-label">WL Revenue</div><div class="kpi-value" id="cb-wlrev">€0</div></div>
-      <div class="kpi-card orange"><div class="kpi-label">WL Profit</div><div class="kpi-value" id="cb-wlp">€0</div></div>
-      <div class="kpi-card blue"><div class="kpi-label">PS Revenue</div><div class="kpi-value" id="cb-psrev">€0</div></div>
-      <div class="kpi-card blue"><div class="kpi-label">PS Profit</div><div class="kpi-value" id="cb-psp">€0</div></div>
-      <div class="kpi-card teal"><div class="kpi-label">Season Profit</div><div class="kpi-value" id="cb-tot">€0</div></div>
-    </div>
+  <div class="pj-grid" id="pj-events"></div>
+  <div class="cc">
+    <div class="ct">Operating margin vs price change</div>
+    <div class="cs">PER EVENT · USES THE VOLUME, COST AND ELASTICITY SETTINGS ABOVE · X = CHANGE IN GROSS PRICE PER BOWL VS 2026</div>
+    <canvas id="pjChart" height="130"></canvas>
   </div>
 </div>
 </main>
@@ -387,6 +287,8 @@ function doLogin(){
 // ── CONSTANTS ──────────────────────────────────────────────────────────
 const WL_FIXED=7191,PS_FIXED=10294,WL_COMM=0.30,WL_COMM_BEV=0.35;
 const BOWL_VAT=0.13,MATE_VAT=0.23,WM_VAT=0.06;
+const WL_BASE=3724; // Waking Life 2026 actual bowls (ERP)
+const PS_BASE=1700; // Primavera Sound 2026: gross sales 23,780 / €14 = ~1,699 bowls (derived)
 // From your Sheet13 exact values
 // Correct: WL net = (€14/1.13) × (1-0.30) - ingredient_cost
 // Ex-VAT: 12.389 | After 30% comm: 8.673
@@ -556,224 +458,147 @@ function drawCosts(){
   });
 }
 
-// ── PROJECTION CHARTS ─────────────────────────────────────────────────
-function wlProfit(b,p=14){const ex=p/(1+BOWL_VAT);return b*(ex*(1-WL_COMM)-VAR_COST)-WL_FIXED;}
-function psProfit(b,p=14){const ex=p/(1+BOWL_VAT);return b*(ex-VAR_COST)-PS_FIXED;}
-function drawProj(){
-  const rng=[500,1000,1500,2000,2200,2500,2688,3000,3500,4000];
-  const wlP=rng.map(b=>wlProfit(b));
-  const psP=rng.map(b=>psProfit(b));
+// ── 2027 PROJECTOR ───────────────────────────────────────────────────
+// 2026 actuals from the ERP (receipts and POS sales). Per-bowl figures are for the rice bowl lines only.
+const EV={
+  wl:{key:'wl',name:'Waking Life',color:'#FF8C3B',on:true,bowls:3724,gross:13.9078,vat:0.13,otherPB:0.6875,otherFix:0,produce:1.2451,fixed:4947.87,feeType:'comm',feeVal:0.30267,shared:2846.64,om26:21319.52,peak:873,
+    hint:'Gross price = €12.00 bowl + average protein extra (€1.91). The contract caps a full meal at €12, so extras stay separate lines. Commission is 30.3% of net sales (30% food, 35% drinks). Other revenue is drinks and slices, net of vouchers.'},
+  ps:{key:'ps',name:'Primavera Sound',color:'#5B8EFF',on:true,bowls:1697,gross:14.0000,vat:0.13,otherPB:0,otherFix:515.05,produce:1.9833,fixed:3451.21,feeType:'fixed',feeVal:5882.95,shared:1266.86,om26:7573.09,peak:589,
+    hint:'Fee is the €5,500 rent plus POS and other charges (€5,883 total). Other revenue is 40 staff meals sold to the organiser, a one-off.'},
+  pdc:{key:'pdc',name:'Paredes de Coura',color:'#B5F23D',on:true,bowls:2427,gross:13.4358,vat:0.13,otherPB:0,otherFix:37.18,produce:1.4217,fixed:4635.72,feeType:'fixed',feeVal:3050,shared:1704.07,om26:16057.16,peak:614,
+    hint:'Fixed fee of €3,050. Nine selling days, so the average day is much lighter than the peak day.'},
+  boom:{key:'boom',name:'Boom Festival',color:'#3BF2C8',on:false,placeholder:true,bowls:2600,gross:13.80,vat:0.13,otherPB:0,otherFix:0,produce:1.55,fixed:4350,feeType:'fixed',feeVal:5000,shared:1500,om26:null,peak:null,
+    hint:'Not confirmed. The numbers in this card are placeholders (bowls, price, produce and fixed costs are averages of the three 2026 events; fee and shared overhead are guesses). Replace them when terms are known.'}
+};
+const PJ_STEPS=[];for(let x=-3;x<=3.001;x+=0.25)PJ_STEPS.push(Math.round(x*100)/100);
+const gid=id=>document.getElementById(id);
+const f0=n=>(n<0?'-':'')+EUR(n);
+const sgn=(n,d=2)=>(n>=0?'+':'-')+'€'+Math.abs(n).toFixed(d);
 
-  dc('wlProj');
-  CH.wlProj=new Chart(document.getElementById('wlProj').getContext('2d'),{
-    type:'line',data:{labels:rng.map(b=>b.toLocaleString()),datasets:[{
-      label:'WL Net Profit',data:wlP,borderColor:'#FF8C3B',backgroundColor:'rgba(255,140,59,0.1)',fill:true,tension:0.4,
-      pointRadius:wlP.map((_,i)=>rng[i]===2688?8:3),
-      pointBackgroundColor:wlP.map((p,i)=>rng[i]===2688?'#B5F23D':p>=0?'#FF8C3B':'#FF5050'),borderWidth:2
-    }]},
-    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.y.toLocaleString()}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}}
-  });
+function pjCalc(e,dP,volPct,costPct,eps){
+  const P=e.gross+dP;
+  const bowls=e.bowls*(1+volPct/100)*Math.pow(P/e.gross,eps);
+  const netPB=P/(1+e.vat)+e.otherPB;
+  const rev=bowls*netPB+e.otherFix;
+  const prodPB=e.produce*(1+costPct/100);
+  const produce=bowls*prodPB;
+  const fee=e.feeType==='comm'?rev*e.feeVal:e.feeVal;
+  const om=rev-produce-e.fixed-fee-e.shared;
+  const contribPB=(e.feeType==='comm'?netPB*(1-e.feeVal):netPB)-prodPB;
+  return {P,bowls,rev,produce,fee,om,contribPB,margin:rev>0?om/rev:0,peakDay:e.peak?e.peak*bowls/e.bowls:null};
+}
+// Volume change at which a price change leaves profit equal to the 2026 price at the same costs
+function pjBE(e,dP,costPct){
+  if(Math.abs(dP)<0.005)return null;
+  const prod=e.produce*(1+costPct/100);
+  const m=p=>{const n=p/(1+e.vat)+e.otherPB;return (e.feeType==='comm'?n*(1-e.feeVal):n)-prod;};
+  const m0=m(e.gross),m1=m(e.gross+dP);
+  if(m1<=0||m0<=0)return null;
+  const ratio=m0/m1;
+  return {chg:(ratio-1)*100,el:Math.log(ratio)/Math.log((e.gross+dP)/e.gross)};
+}
+function pjSlider(id,label,min,max,step,val){
+  return `<div class="sg"><div class="sr"><span class="sl">${label}</span><span class="pj-sv" id="${id}-v"></span></div><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}" oninput="pjUpdate()"></div>`;
+}
+function pjRow(label,id,style=''){return `<div class="rr"><span class="rl">${label}</span><span class="rv" id="${id}" style="${style}">—</span></div>`;}
+function pjCard(e){
+  const k=e.key;
+  const fields=[['bowls','Bowls',1],['gross','Gross price/bowl (€)',0.05],['produce','Produce cost/bowl (€)',0.05],['fixed','Staff, truck, transport, setup (€)',50],['feeVal','Festival fee (€)',100],['shared','Shared overhead (€)',100]];
+  const inputs=e.placeholder?`<div class="pj-ins">${fields.map(([f,l,st])=>`<label class="sl" for="pj-${k}-${f}">${l}<input class="pj-in" id="pj-${k}-${f}" type="number" step="${st}" value="${e[f]}" oninput="pjIn('${k}','${f}',this.value)"></label>`).join('')}</div>`:'';
+  return `<div class="fp" id="pj-${k}-card">
+    <div class="fh"><div class="fd" style="background:${e.color};"></div><div class="fn" style="color:${e.color};">${e.name}</div>${e.placeholder?'<span class="pj-flag">NOT CONFIRMED</span>':''}
+      <label class="pj-on" for="pj-${k}-on"><input type="checkbox" id="pj-${k}-on" ${e.on?'checked':''} onchange="pjUpdate()"> In season</label></div>
+    ${inputs}
+    ${pjSlider(`pj-${k}-dp`,'Price change vs 2026 (gross per bowl)',-3,3,0.05,0)}
+    ${pjSlider(`pj-${k}-vol`,'Demand change (attendance, weather, luck)',-40,60,1,0)}
+    ${pjSlider(`pj-${k}-cost`,'Produce cost change',-20,40,1,0)}
+    <div class="rp" style="margin-top:6px;">
+      ${pjRow('Gross price per bowl',`pj-${k}-p`)}
+      ${pjRow('Bowls',`pj-${k}-b`)}
+      ${pjRow('Net revenue',`pj-${k}-rev`,'color:var(--lime)')}
+      ${pjRow('— Produce',`pj-${k}-prod`,'color:var(--red)')}
+      ${pjRow('— Staff, truck, transport, setup',`pj-${k}-fix`,'color:var(--red)')}
+      ${pjRow('— Festival fee',`pj-${k}-fee`,'color:var(--red)')}
+      ${pjRow('— Shared overhead',`pj-${k}-sh`,'color:var(--orange)')}
+      <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;padding-top:6px;"><span class="rl" style="color:var(--text);font-weight:500;">OPERATING MARGIN</span><span class="rv" id="pj-${k}-om" style="font-size:20px;">—</span></div>
+      ${pjRow('Margin on revenue',`pj-${k}-mg`)}
+      ${pjRow('Contribution per extra bowl',`pj-${k}-cpb`,'color:var(--teal)')}
+      ${e.om26!=null?pjRow('2026 actual',`pj-${k}-26`)+pjRow('Change vs 2026',`pj-${k}-d`):''}
+    </div>
+    <div class="pj-hint" id="pj-${k}-be"></div>
+    <div class="pj-hint" id="pj-${k}-pk"></div>
+    <div class="pj-hint">${e.hint}</div>
+  </div>`;
+}
+function pjIn(k,f,v){const n=parseFloat(v);if(isFinite(n)){EV[k][f]=n;pjUpdate();}}
 
-  // WL Table
-  const wlT=document.getElementById('wlTable');
-  wlT.innerHTML='<thead><tr><th>Bowls</th><th class="n">Net Profit</th><th class="n">Margin</th></tr></thead>';
-  let b='<tbody>';
-  [1000,1500,2000,2200,2688,3000,3500,4000].forEach(bw=>{
-    const p=wlProfit(bw),m=p/(bw*14),isBas=bw===2688;
-    b+=`<tr style="${isBas?'background:rgba(181,242,61,0.06);':''}"><td>${bw.toLocaleString()}${isBas?' ★':''}</td>
-      <td class="n" style="color:${p>=0?'var(--lime)':'var(--red)'}">${(p<0?'-':'')+EUR(p)}</td>
-      <td class="n" style="color:${m>=0?'var(--teal)':'var(--red)'}">${pct(m)}</td></tr>`;
-  });
-  wlT.innerHTML+=b+'</tbody>';
-
-  dc('psProj');
-  CH.psProj=new Chart(document.getElementById('psProj').getContext('2d'),{
-    type:'line',data:{labels:rng.map(b=>b.toLocaleString()),datasets:[{
-      label:'PS Net Profit',data:psP,borderColor:'#5B8EFF',backgroundColor:'rgba(91,142,255,0.1)',fill:true,tension:0.4,
-      pointRadius:psP.map((_,i)=>rng[i]===2500?8:3),
-      pointBackgroundColor:psP.map(p=>p>=0?'#5B8EFF':'#FF5050'),borderWidth:2
-    }]},
-    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'€'+ctx.parsed.y.toLocaleString()}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}}
-  });
-
-  const psT=document.getElementById('psTable');
-  psT.innerHTML='<thead><tr><th>Bowls</th><th class="n">Net Profit</th><th class="n">Margin</th></tr></thead>';
-  let pb='<tbody>';
-  [1000,1500,2000,2500,3000,3500,4000].forEach(bw=>{
-    const p=psProfit(bw),m=p/(bw*14);
-    pb+=`<tr><td>${bw.toLocaleString()}</td>
-      <td class="n" style="color:${p>=0?'var(--lime)':'var(--red)'}">${(p<0?'-':'')+EUR(p)}</td>
-      <td class="n" style="color:${m>=0?'var(--teal)':'var(--red)'}">${pct(m)}</td></tr>`;
-  });
-  psT.innerHTML+=pb+'</tbody>';
-  document.getElementById('psKPI').textContent=EUR(psProfit(2500));
-
-  dc('combined');
-  const sc=[1000,1500,2000,2500,3000,3500];
-  CH.combined=new Chart(document.getElementById('combined').getContext('2d'),{
-    type:'bar',
-    data:{
-      labels:sc.map(b=>`${b.toLocaleString()}/fest (${(b*2).toLocaleString()} total)`),
-      datasets:[
-        {label:'WL Profit',data:sc.map(b=>wlProfit(b)),backgroundColor:'rgba(255,140,59,0.6)',borderColor:'#FF8C3B',borderWidth:1,borderRadius:3},
-        {label:'PS Profit',data:sc.map(b=>psProfit(b)),backgroundColor:'rgba(91,142,255,0.6)',borderColor:'#5B8EFF',borderWidth:1,borderRadius:3},
-        {label:'Combined (both festivals)',data:sc.map(b=>wlProfit(b)+psProfit(b)),type:'line',borderColor:'#B5F23D',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#B5F23D'}
-      ]
-    },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{position:'top'},
-        tooltip:{callbacks:{
-          label:ctx=>{
-            if(ctx.dataset.label.startsWith('Combined')){
-              const b=sc[ctx.dataIndex];
-              return `Combined (${(b*2).toLocaleString()} bowls total): €${ctx.parsed.y.toLocaleString()}`;
-            }
-            return ctx.dataset.label+': €'+ctx.parsed.y.toLocaleString();
-          }
-        }}
-      },
-      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}
+function pjUpdate(){
+  const eps=+gid('pj-eps').value;
+  gid('pj-eps-v').textContent=eps.toFixed(1);
+  const tot={om:0,rev:0,bowls:0,om26:0,omCmp:0,n:0};
+  const sets={};
+  Object.values(EV).forEach(e=>{
+    const k=e.key;
+    e.on=gid(`pj-${k}-on`).checked;
+    const dP=+gid(`pj-${k}-dp`).value,vol=+gid(`pj-${k}-vol`).value,cp=+gid(`pj-${k}-cost`).value;
+    sets[k]={dP,vol,cp};
+    gid(`pj-${k}-dp-v`).textContent=sgn(dP)+' → €'+(e.gross+dP).toFixed(2);
+    gid(`pj-${k}-vol-v`).textContent=(vol>0?'+':'')+vol+'%';
+    gid(`pj-${k}-cost-v`).textContent=(cp>0?'+':'')+cp+'%';
+    const r=pjCalc(e,dP,vol,cp,eps);
+    gid(`pj-${k}-p`).textContent='€'+r.P.toFixed(2);
+    gid(`pj-${k}-b`).textContent=Math.round(r.bowls).toLocaleString();
+    gid(`pj-${k}-rev`).textContent=EUR(r.rev);
+    gid(`pj-${k}-prod`).textContent='-'+EUR(r.produce);
+    gid(`pj-${k}-fix`).textContent='-'+EUR(e.fixed);
+    gid(`pj-${k}-fee`).textContent='-'+EUR(r.fee);
+    gid(`pj-${k}-sh`).textContent='-'+EUR(e.shared);
+    const om=gid(`pj-${k}-om`);om.textContent=f0(r.om);om.className='rv '+(r.om>=0?'g':'r');
+    gid(`pj-${k}-mg`).textContent=pct(r.margin);
+    gid(`pj-${k}-cpb`).textContent='€'+r.contribPB.toFixed(2);
+    if(e.om26!=null){
+      gid(`pj-${k}-26`).textContent=f0(e.om26);
+      const d=gid(`pj-${k}-d`);const dv=r.om-e.om26;d.textContent=(dv>=0?'+':'-')+EUR(dv);d.className='rv '+(dv>=0?'g':'r');
     }
+    const be=pjBE(e,dP,cp);
+    gid(`pj-${k}-be`).textContent=!be?'Move the price slider to see how much volume a price change can cost before it stops paying.':
+      (dP>0?`At ${sgn(dP)} you can lose up to ${(-be.chg).toFixed(1)}% of bowls (elasticity ${be.el.toFixed(1)}) before the rise stops paying.`
+            :`A cut of ${sgn(dP)} needs ${be.chg.toFixed(1)}% more bowls (elasticity ${be.el.toFixed(1)}) just to break even.`);
+    const pk=gid(`pj-${k}-pk`);
+    if(r.peakDay){const over=r.peakDay>e.peak*1.2;pk.textContent=`Busiest day would be about ${Math.round(r.peakDay)} bowls (2026 peak: ${e.peak}).${over?' That is well above anything served so far; check that the kitchen can keep up.':''}`;pk.style.color=over?'var(--yellow)':'';}
+    else{pk.textContent='';}
+    gid(`pj-${k}-card`).classList.toggle('pj-off',!e.on);
+    if(e.on){tot.om+=r.om;tot.rev+=r.rev;tot.bowls+=r.bowls;if(e.om26!=null){tot.om26+=e.om26;tot.omCmp+=r.om;tot.n++;}}
   });
+  const dTot=tot.omCmp-tot.om26;
+  const hasCmp=tot.n>0;
+  gid('pj-kpis').innerHTML=`
+    <div class="kpi-card teal"><div class="kpi-label">Season operating margin</div><div class="kpi-value" style="color:${tot.om>=0?'var(--lime)':'var(--red)'}">${f0(tot.om)}</div><div class="kpi-sub">events in season</div></div>
+    <div class="kpi-card"><div class="kpi-label">2026, same events</div><div class="kpi-value">${hasCmp?f0(tot.om26):'—'}</div><div class="kpi-sub">${hasCmp?'excludes unconfirmed events':'no 2026 comparison'}</div></div>
+    <div class="kpi-card orange"><div class="kpi-label">Net revenue</div><div class="kpi-value">${EUR(tot.rev)}</div><div class="kpi-sub">${Math.round(tot.bowls).toLocaleString()} bowls</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Change vs 2026</div><div class="kpi-value" style="color:${dTot>=0?'var(--lime)':'var(--red)'}">${hasCmp?(dTot>=0?'+':'-')+EUR(dTot):'—'}</div><div class="kpi-sub">${hasCmp?'events that also ran in 2026':''}</div></div>`;
+  // chart
+  if(CH.pj){
+    CH.pj.data.datasets.forEach((ds,i)=>{
+      const e=Object.values(EV)[i],st=sets[e.key];
+      ds.data=PJ_STEPS.map(x=>pjCalc(e,x,st.vol,st.cp,eps).om);
+      ds.hidden=!e.on;
+    });
+    CH.pj.update('none');
+  }
 }
-
-// ── SCENARIO BUILDER ──────────────────────────────────────────────────
-let wlProd={mate:true,wm:true,jal:true,ep:true};
-let psProd={wm:true,jal:true,ep:true};
-let _wlP=0,_psP=0,_wlR=0,_psR=0;
-
-function tWL(p){wlProd[p]=!wlProd[p];document.getElementById('wl-c-'+p).classList.toggle('on',wlProd[p]);updWL();}
-function tPS(p){psProd[p]=!psProd[p];document.getElementById('ps-c-'+p).classList.toggle('on',psProd[p]);updPS();}
-
-function calcFest(o){
-  const {bowls,price,days,comm,commBev,useMate,mateRate,useWM,wmDay,wmP2,useJal,jalRate,useEP,epRate,staff,fix,isWL}=o;
-  const exVAT=price/(1+BOWL_VAT);
-  const bowlComm=isWL?bowls*exVAT*comm:0;
-  const bowlIngr=bowls*VAR_COST;
-  const bowlRev=bowls*exVAT;
-  let mR=0,mC=0,mI=0;
-  if(useMate&&isWL){const u=bowls*mateRate;const me=5/(1+MATE_VAT);mR=u*5;mC=u*me*commBev;mI=u*1.17;}
-  let wR=0,wC=0,wI=0;
-  if(useWM){const u=wmDay*days;const we=wmP2/(1+WM_VAT);wR=u*wmP2;wC=isWL?u*we*comm:0;wI=u*0.108;}
-  let jR=0;if(useJal)jR=bowls*jalRate*1;
-  let eR=0,eI=0;if(useEP){eR=bowls*epRate*1.5;eI=bowls*epRate*0.7;}
-  const totalRev=bowlRev+mR+wR+jR+eR;
-  const totalComm=bowlComm+mC+wC;
-  const totalIngr=bowlIngr+mI+wI+eI;
-  const fixed=staff+fix;
-  const contrib=totalRev-totalComm-totalIngr;
-  const profit=contrib-fixed;
-  const cpb=exVAT*(1-comm)-VAR_COST;
-  const be=cpb>0?Math.ceil(fixed/cpb):Infinity;
-  return {bowlRev,mR,wR,jR,eR,totalRev,totalComm,totalIngr,fixed,contrib,profit,be};
-}
-
-function setRV(id,v,cls=''){const el=document.getElementById(id);if(el){el.textContent=v;if(cls)el.className='rv '+cls;}}
-function renderR(pfx,r,prod,isWL){
-  const fmt=v=>(v<0?'-':'')+EUR(v);
-  setRV(pfx+'-brev',EUR(r.bowlRev));
-  if(isWL)setRV('wr-mrev',prod.mate?EUR(r.mR):'—',prod.mate?'b':'');
-  setRV(pfx+(isWL?'-wmrev':'r-wmrev')||pfx+'-wmrev', (isWL?prod.wm:prod.wm)?EUR(r.wR):'—');
-  setRV(pfx+'-jrev',(isWL?prod.jal:prod.jal)?EUR(r.jR):'—');
-  setRV(pfx+'-eprev',(isWL?prod.ep:prod.ep)?EUR(r.eR):'—');
-  setRV(pfx+'-trev',EUR(r.totalRev));
-  if(isWL)setRV('wr-comm','-'+EUR(r.totalComm));
-  setRV(pfx+'-ingr','-'+EUR(r.totalIngr));
-  setRV(pfx+'-contrib',EUR(r.contrib),'t');
-  setRV(pfx+'-fixed','-'+EUR(r.fixed));
-  const pEl=document.getElementById(pfx+'-profit');
-  if(pEl){pEl.textContent=fmt(r.profit);pEl.className='rv '+(r.profit>=0?'g':'r');}
-  const mEl=document.getElementById(pfx+'-margin');
-  if(mEl){const m=r.profit/r.totalRev;mEl.textContent=pct(m);mEl.className='rv '+(m>=0?'g':'r');}
-  const beEl=document.getElementById(pfx+'-be');
-  const bowls=isWL?+document.getElementById('ws-bowls').value:+document.getElementById('ps-bowls').value;
-  if(beEl){beEl.textContent=isFinite(r.be)?r.be.toLocaleString()+' bowls':'∞';beEl.className='rv '+(bowls>=r.be?'g':'o');}
-}
-
-function drawWfall(cid,r,isWL){
-  dc(cid);
-  const other=r.mR+r.wR+r.jR+r.eR;
-  const labels=isWL?['Bowl Rev','+ Others','- Comm','- Ingr','- Fixed','Profit']:['Bowl Rev','+ Others','- Ingr','- Fixed','Profit'];
-  const vals=isWL?[r.bowlRev,other,-r.totalComm,-r.totalIngr,-r.fixed,r.profit]:[r.bowlRev,other,-r.totalIngr,-r.fixed,r.profit];
-  const cls=isWL?['#5B8EFF','#3BF2C8','#FF5050','#FF8C3B','#FFD93B',r.profit>=0?'#B5F23D':'#FF5050']:['#5B8EFF','#3BF2C8','#FF8C3B','#FFD93B',r.profit>=0?'#B5F23D':'#FF5050'];
-  CH[cid]=new Chart(document.getElementById(cid).getContext('2d'),{
-    type:'bar',data:{labels,datasets:[{data:vals.map(Math.abs),backgroundColor:cls.map(c=>c+'99'),borderColor:cls,borderWidth:1,borderRadius:4}]},
-    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const v=vals[ctx.dataIndex];return (v<0?'-':'')+EUR(Math.abs(v));}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}}
-  });
-}
-
-function updWL(){
-  const bowls=+document.getElementById('ws-bowls').value;
-  const price=+document.getElementById('ws-price').value;
-  const days=+document.getElementById('ws-days').value;
-  const mateRate=document.getElementById('ws-mate').value/100;
-  const wmDay=+document.getElementById('ws-wm').value;
-  const wmP2=+document.getElementById('ws-wmp').value;
-  const jalRate=document.getElementById('ws-jal').value/100;
-  const epRate=document.getElementById('ws-ep').value/100;
-  const staff=+document.getElementById('ws-staff').value;
-  const fix=+document.getElementById('ws-fix').value;
-  document.getElementById('wv-bowls').textContent=bowls.toLocaleString();
-  document.getElementById('wv-price').textContent=price.toFixed(2);
-  document.getElementById('wv-days').textContent=days;
-  document.getElementById('wv-mate').textContent=(mateRate*100).toFixed(0)+'%';
-  document.getElementById('wv-wm').textContent=wmDay;
-  document.getElementById('wv-wmp').textContent='€'+wmP2.toFixed(2);
-  document.getElementById('wv-jal').textContent=(jalRate*100).toFixed(0)+'%';
-  document.getElementById('wv-ep').textContent=(epRate*100).toFixed(0)+'%';
-  document.getElementById('wv-staff').textContent='€'+staff.toLocaleString();
-  document.getElementById('wv-fix').textContent='€'+fix.toLocaleString();
-  const r=calcFest({bowls,price,days,comm:WL_COMM,commBev:WL_COMM_BEV,useMate:wlProd.mate,mateRate,useWM:wlProd.wm,wmDay,wmP2,useJal:wlProd.jal,jalRate,useEP:wlProd.ep,epRate,staff,fix,isWL:true});
-  renderR('wr',r,wlProd,true);
-  drawWfall('wlWfall',r,true);
-  _wlP=r.profit;_wlR=r.totalRev;updComb();
-}
-
-function updPS(){
-  const bowls=+document.getElementById('ps-bowls').value;
-  const price=+document.getElementById('ps-price').value;
-  const days=+document.getElementById('ps-days').value;
-  const wmDay=+document.getElementById('ps-wm').value;
-  const wmP2=+document.getElementById('ps-wmp').value;
-  const jalRate=document.getElementById('ps-jal').value/100;
-  const epRate=document.getElementById('ps-ep').value/100;
-  const staff=+document.getElementById('ps-staff').value;
-  const fix=+document.getElementById('ps-fix').value;
-  document.getElementById('pv-bowls').textContent=bowls.toLocaleString();
-  document.getElementById('pv-price').textContent=price.toFixed(2);
-  document.getElementById('pv-days').textContent=days;
-  document.getElementById('pv-wm').textContent=wmDay;
-  document.getElementById('pv-wmp').textContent='€'+wmP2.toFixed(2);
-  document.getElementById('pv-jal').textContent=(jalRate*100).toFixed(0)+'%';
-  document.getElementById('pv-ep').textContent=(epRate*100).toFixed(0)+'%';
-  document.getElementById('pv-staff').textContent='€'+staff.toLocaleString();
-  document.getElementById('pv-fix').textContent='€'+fix.toLocaleString();
-  const r=calcFest({bowls,price,days,comm:0,commBev:0,useMate:false,mateRate:0,useWM:psProd.wm,wmDay,wmP2,useJal:psProd.jal,jalRate,useEP:psProd.ep,epRate,staff,fix,isWL:false});
-  // PS result panel uses pr- prefix
-  document.getElementById('pr-brev').textContent=EUR(r.bowlRev);
-  document.getElementById('pr-wmrev').textContent=psProd.wm?EUR(r.wR):'—';
-  document.getElementById('pr-jrev').textContent=psProd.jal?EUR(r.jR):'—';
-  document.getElementById('pr-eprev').textContent=psProd.ep?EUR(r.eR):'—';
-  document.getElementById('pr-trev').textContent=EUR(r.totalRev);
-  document.getElementById('pr-ingr').textContent='-'+EUR(r.totalIngr);
-  document.getElementById('pr-contrib').textContent=EUR(r.contrib);
-  document.getElementById('pr-fixed').textContent='-'+EUR(r.fixed);
-  const pEl=document.getElementById('pr-profit');pEl.textContent=(r.profit<0?'-':'')+EUR(r.profit);pEl.className='rv '+(r.profit>=0?'g':'r');
-  const mEl=document.getElementById('pr-margin');const m=r.profit/r.totalRev;mEl.textContent=pct(m);mEl.className='rv '+(m>=0?'g':'r');
-  const beEl=document.getElementById('pr-be');beEl.textContent=isFinite(r.be)?r.be.toLocaleString()+' bowls':'∞';beEl.className='rv '+(bowls>=r.be?'g':'o');
-  drawWfall('psWfall',r,false);
-  _psP=r.profit;_psR=r.totalRev;updComb();
-}
-
-function updComb(){
-  const fv=v=>{const el=document.createElement('span');el.style.color=v>=0?'var(--lime)':'var(--red)';el.textContent=(v<0?'-':'')+EUR(v);return el.outerHTML;};
-  document.getElementById('cb-wlrev').textContent=EUR(_wlR);
-  document.getElementById('cb-psrev').textContent=EUR(_psR);
-  document.getElementById('cb-wlp').innerHTML=fv(_wlP);
-  document.getElementById('cb-psp').innerHTML=fv(_psP);
-  document.getElementById('cb-tot').innerHTML=fv(_wlP+_psP);
+let pjInit=false;
+function drawProj(){
+  if(!pjInit){
+    pjInit=true;
+    gid('pj-events').innerHTML=Object.keys(EV).map(k=>{EV[k].key=k;return pjCard(EV[k]);}).join('');
+    CH.pj=new Chart(gid('pjChart').getContext('2d'),{
+      type:'line',
+      data:{labels:PJ_STEPS.map(x=>(x>0?'+':x<0?'-':'')+(x===0?'€0':'€'+Math.abs(x).toFixed(2))),datasets:Object.values(EV).map(e=>({label:e.name,data:[],borderColor:e.color,backgroundColor:'transparent',tension:0.3,borderWidth:2,pointRadius:2,borderDash:e.placeholder?[5,4]:[]}))},
+      options:{responsive:true,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+f0(c.parsed.y)}}},scales:{x:{grid:{display:false},ticks:{maxTicksLimit:13}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>'€'+v.toLocaleString()}}}}
+    });
+  }
+  pjUpdate();
 }
 
 // ── NAV ───────────────────────────────────────────────────────────────
@@ -785,7 +610,6 @@ function showTab(id,btn){
   if(id==='results')drawResults();
   if(id==='costs')drawCosts();
   if(id==='proj')drawProj();
-  if(id==='scenario'){updWL();updPS();}
 }
 
 // Init
