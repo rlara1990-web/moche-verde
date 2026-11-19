@@ -89,6 +89,7 @@
   .pj-ins label{display:flex;flex-direction:column;gap:3px;}
   .pj-in{width:100%;background:var(--dark3);border:1px solid var(--border2);border-radius:8px;padding:6px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;}
   .pj-in:focus{outline:none;border-color:var(--lime);}
+  .pj-ad{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:6px;align-items:center;margin-bottom:6px;}
   .pj-flag{font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(255,217,59,.15);color:var(--yellow);}
   .pj-hint{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:1.5;margin-top:10px;}
   .pj-on{margin-left:auto;display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);cursor:pointer;}
@@ -267,7 +268,7 @@ function doLogin(){
 <!-- ══ TAB 3: 2027 PROJECTOR ══ -->
 <div id="proj" class="section">
   <div class="sh"><h2>2027 Projector</h2><div class="ln"></div><div class="stag">Baseline: 2026 actuals (ERP)</div></div>
-  <div class="note">Each event starts from its 2026 result. The price lever is the average gross price per bowl, protein included. Produce cost is the only cost that moves with bowls; staff, truck, transport and setup are fixed per event, and shared overhead is the share allocated to each event in 2026. Margins are before any payout to the partners. At zero change, every event reproduces its 2026 operating margin within about €5.</div>
+  <div class="note">Each event starts from its 2026 result. The price lever is the average gross price per bowl, protein included. Produce and the add-on costs are the only costs that move with bowls; staff, truck, transport and setup are fixed per event, and shared overhead is the share allocated to each event in 2026. Margins are before any payout to the partners. With every lever at zero, Primavera reproduces its 2026 margin within €1; Waking Life and Paredes de Coura differ from 2026 only by the new drinks (Jamaica juice), whose sales rate is a placeholder.</div>
   <div class="kpi-row" id="pj-kpis" style="grid-template-columns:repeat(4,1fr);"></div>
   <div class="cc" style="margin-bottom:12px;">
     <div class="sg" style="margin-bottom:6px;"><div class="sr"><span class="sl">Price elasticity of demand</span><span class="sv" id="pj-eps-v">-0.8</span></div><input type="range" id="pj-eps" min="-2" max="0" step="0.1" value="-0.8" oninput="pjUpdate()"></div>
@@ -461,13 +462,17 @@ function drawCosts(){
 // ── 2027 PROJECTOR ───────────────────────────────────────────────────
 // 2026 actuals from the ERP (receipts and POS sales). Per-bowl figures are for the rice bowl lines only.
 const EV={
-  wl:{key:'wl',name:'Waking Life',color:'#FF8C3B',on:true,bowls:3724,gross:13.9078,vat:0.13,otherPB:0.6875,otherFix:0,produce:1.2451,fixed:4947.87,feeType:'comm',feeVal:0.30267,shared:2846.64,om26:21319.52,peak:873,
-    hint:'Gross price = €12.00 bowl + average protein extra (€1.91). The contract caps a full meal at €12, so extras stay separate lines. Commission is 30.3% of net sales (30% food, 35% drinks). Other revenue is drinks and slices, net of vouchers.'},
-  ps:{key:'ps',name:'Primavera Sound',color:'#5B8EFF',on:true,bowls:1697,gross:14.0000,vat:0.13,otherPB:0,otherFix:515.05,produce:1.9833,fixed:3451.21,feeType:'fixed',feeVal:5882.95,shared:1266.86,om26:7573.09,peak:589,
-    hint:'Fee is the €5,500 rent plus POS and other charges (€5,883 total). Other revenue is 40 staff meals sold to the organiser, a one-off.'},
-  pdc:{key:'pdc',name:'Paredes de Coura',color:'#B5F23D',on:true,bowls:2427,gross:13.4358,vat:0.13,otherPB:0,otherFix:37.18,produce:1.4217,fixed:4635.72,feeType:'fixed',feeVal:3050,shared:1704.07,om26:16057.16,peak:614,
-    hint:'Fixed fee of €3,050. Nine selling days, so the average day is much lighter than the peak day.'},
-  boom:{key:'boom',name:'Boom Festival',color:'#3BF2C8',on:false,placeholder:true,bowls:2600,gross:13.80,vat:0.13,otherPB:0,otherFix:0,produce:1.55,fixed:4350,feeType:'fixed',feeVal:5000,shared:1500,om26:null,peak:null,
+  wl:{key:'wl',name:'Waking Life',color:'#FF8C3B',on:true,bowls:3724,gross:13.9078,vat:0.13,otherPB:-0.2460,otherFix:0,otherLabel:'Vouchers, discounts, cup deposits',produce:1.0134,fixed:4947.87,feeType:'comm',foodRate:0.30,drinkRate:0.35,shared:2846.64,om26:21319.52,peak:873,
+    adds:[
+      {name:'Jamaica juice',per100:12.27,price:5.00,vat:0.13,cost:0.50,drink:true},
+      {name:'Watermelon slice',per100:7.25,price:3.50,vat:0.06,cost:0.50,drink:false},
+      {name:'Tigers Milk Shot',per100:5.69,price:3.00,vat:0.13,cost:0.20,drink:true}],
+    hint:'Gross price = €12.00 bowl + average protein extra (€1.91). The contract caps a full meal at €12, so extras stay separate lines. Commission is 30% on food (bowls, slices, vouchers) and 35% on drinks. Add-on unit costs are estimates; the bowl produce cost is the 2026 produce total minus the estimated add-on costs. Add-on sales follow bowl volume and do not react to the price slider. For 2027, Jamaica juice replaces Moonboy Mate (2026: 12.3 sold per 100 bowls at €5.00, cost €1.50). Jamaica juice sales rate is a placeholder, not data.'},
+  ps:{key:'ps',name:'Primavera Sound',color:'#5B8EFF',on:true,bowls:1697,gross:14.0000,vat:0.13,otherPB:0,otherFix:515.05,otherLabel:'Staff meals sold to organiser',produce:1.9833,fixed:3451.21,feeType:'fixed',feeVal:5882.95,shared:1266.86,om26:7573.09,peak:589,adds:[],
+    hint:'Fee is the €5,500 rent plus POS and other charges (€5,883 total). The staff meals (40) were a one-off sale to the organiser.'},
+  pdc:{key:'pdc',name:'Paredes de Coura',color:'#B5F23D',on:true,bowls:2427,gross:13.4358,vat:0.13,otherPB:0,otherFix:37.18,otherLabel:'Other sales (sandwiches)',produce:1.4217,fixed:4635.72,feeType:'fixed',feeVal:3050,shared:1704.07,om26:16057.16,peak:614,adds:[{name:'Jamaica juice',per100:10,price:5.00,vat:0.13,cost:0.50,drink:true}],
+    hint:'Fixed fee of €3,050. Nine selling days, so the average day is much lighter than the peak day. Jamaica juice is new for 2027 and no drinks were sold here in 2026, so its sales rate (10 per 100 bowls) is a placeholder.'},
+  boom:{key:'boom',name:'Boom Festival',color:'#3BF2C8',on:false,placeholder:true,bowls:2600,gross:13.80,vat:0.13,otherPB:0,otherFix:0,otherLabel:'Other sales',produce:1.55,fixed:4350,feeType:'fixed',feeVal:5000,shared:1500,om26:null,peak:null,adds:[],
     hint:'Not confirmed. The numbers in this card are placeholders (bowls, price, produce and fixed costs are averages of the three 2026 events; fee and shared overhead are guesses). Replace them when terms are known.'}
 };
 const PJ_STEPS=[];for(let x=-3;x<=3.001;x+=0.25)PJ_STEPS.push(Math.round(x*100)/100);
@@ -476,23 +481,31 @@ const f0=n=>(n<0?'-':'')+EUR(n);
 const sgn=(n,d=2)=>(n>=0?'+':'-')+'€'+Math.abs(n).toFixed(d);
 
 function pjCalc(e,dP,volPct,costPct,eps){
-  const P=e.gross+dP;
+  const P=e.gross+dP,cm=1+costPct/100;
   const bowls=e.bowls*(1+volPct/100)*Math.pow(P/e.gross,eps);
-  const netPB=P/(1+e.vat)+e.otherPB;
-  const rev=bowls*netPB+e.otherFix;
-  const prodPB=e.produce*(1+costPct/100);
-  const produce=bowls*prodPB;
-  const fee=e.feeType==='comm'?rev*e.feeVal:e.feeVal;
-  const om=rev-produce-e.fixed-fee-e.shared;
-  const contribPB=(e.feeType==='comm'?netPB*(1-e.feeVal):netPB)-prodPB;
-  return {P,bowls,rev,produce,fee,om,contribPB,margin:rev>0?om/rev:0,peakDay:e.peak?e.peak*bowls/e.bowls:null};
+  const bowlNet=bowls*P/(1+e.vat);
+  const adds=(e.adds||[]).map(a=>{const u=bowls*a.per100/100;return {u,net:u*a.price/(1+a.vat),cost:u*a.cost*cm,drink:a.drink};});
+  const other=bowls*e.otherPB+e.otherFix;
+  const addNet=adds.reduce((t,a)=>t+a.net,0);
+  const rev=bowlNet+addNet+other;
+  const drinkNet=adds.filter(a=>a.drink).reduce((t,a)=>t+a.net,0);
+  const foodNet=rev-drinkNet;
+  const fee=e.feeType==='comm'?foodNet*e.foodRate+drinkNet*e.drinkRate:e.feeVal;
+  const prodB=bowls*e.produce*cm,prodA=adds.reduce((t,a)=>t+a.cost,0);
+  const om=rev-prodB-prodA-e.fixed-fee-e.shared;
+  return {P,bowls,bowlNet,adds,other,rev,prodB,prodA,fee,om,margin:rev>0?om/rev:0,contribPB:pjContrib(e,P,costPct),peakDay:e.peak?e.peak*bowls/e.bowls:null};
+}
+// contribution of one more bowl at gross price P, including the add-ons that come with it
+function pjContrib(e,P,costPct){
+  const cm=1+costPct/100,fr=e.feeType==='comm'?e.foodRate:0,dr=e.feeType==='comm'?e.drinkRate:0;
+  let c=P/(1+e.vat)*(1-fr)+e.otherPB*(1-fr)-e.produce*cm;
+  (e.adds||[]).forEach(a=>{const n=a.price/(1+a.vat)*a.per100/100;c+=n*(1-(a.drink?dr:fr))-a.cost*cm*a.per100/100;});
+  return c;
 }
 // Volume change at which a price change leaves profit equal to the 2026 price at the same costs
 function pjBE(e,dP,costPct){
   if(Math.abs(dP)<0.005)return null;
-  const prod=e.produce*(1+costPct/100);
-  const m=p=>{const n=p/(1+e.vat)+e.otherPB;return (e.feeType==='comm'?n*(1-e.feeVal):n)-prod;};
-  const m0=m(e.gross),m1=m(e.gross+dP);
+  const m0=pjContrib(e,e.gross,costPct),m1=pjContrib(e,e.gross+dP,costPct);
   if(m1<=0||m0<=0)return null;
   const ratio=m0/m1;
   return {chg:(ratio-1)*100,el:Math.log(ratio)/Math.log((e.gross+dP)/e.gross)};
@@ -505,6 +518,8 @@ function pjCard(e){
   const k=e.key;
   const fields=[['bowls','Bowls',1],['gross','Gross price/bowl (€)',0.05],['produce','Produce cost/bowl (€)',0.05],['fixed','Staff, truck, transport, setup (€)',50],['feeVal','Festival fee (€)',100],['shared','Shared overhead (€)',100]];
   const inputs=e.placeholder?`<div class="pj-ins">${fields.map(([f,l,st])=>`<label class="sl" for="pj-${k}-${f}">${l}<input class="pj-in" id="pj-${k}-${f}" type="number" step="${st}" value="${e[f]}" oninput="pjIn('${k}','${f}',this.value)"></label>`).join('')}</div>`:'';
+  const addIns=e.adds.length?`<div class="pj-hint" style="margin:0 0 6px;">ADD-ONS · SOLD PER 100 BOWLS · GROSS PRICE (€) · UNIT COST, NET (€)</div>`+e.adds.map((a,i)=>`<div class="pj-ad"><span class="sl">${a.name}</span>${['per100','price','cost'].map(f=>`<input class="pj-in" aria-label="${a.name} ${f}" id="pj-${k}-a${i}-${f}" type="number" step="0.05" value="${a[f]}" oninput="pjAdd('${k}',${i},'${f}',this.value)">`).join('')}</div>`).join('')+'<div style="height:10px"></div>':'';
+  const revRows=pjRow('Bowls',`pj-${k}-rb`)+e.adds.map((a,i)=>pjRow(a.name,`pj-${k}-ra${i}`)).join('')+((e.otherPB!==0||e.otherFix!==0)?pjRow(e.otherLabel,`pj-${k}-ro`):'');
   return `<div class="fp" id="pj-${k}-card">
     <div class="fh"><div class="fd" style="background:${e.color};"></div><div class="fn" style="color:${e.color};">${e.name}</div>${e.placeholder?'<span class="pj-flag">NOT CONFIRMED</span>':''}
       <label class="pj-on" for="pj-${k}-on"><input type="checkbox" id="pj-${k}-on" ${e.on?'checked':''} onchange="pjUpdate()"> In season</label></div>
@@ -512,11 +527,15 @@ function pjCard(e){
     ${pjSlider(`pj-${k}-dp`,'Price change vs 2026 (gross per bowl)',-3,3,0.05,0)}
     ${pjSlider(`pj-${k}-vol`,'Demand change (attendance, weather, luck)',-40,60,1,0)}
     ${pjSlider(`pj-${k}-cost`,'Produce cost change',-20,40,1,0)}
+    ${addIns}
     <div class="rp" style="margin-top:6px;">
       ${pjRow('Gross price per bowl',`pj-${k}-p`)}
-      ${pjRow('Bowls',`pj-${k}-b`)}
+      ${pjRow('Bowls sold',`pj-${k}-b`)}
+      <div class="rr" style="border-top:1px solid var(--border);margin-top:2px;"><span class="rl" style="color:var(--text);">REVENUE (NET OF VAT)</span><span></span></div>
+      ${revRows}
       ${pjRow('Net revenue',`pj-${k}-rev`,'color:var(--lime)')}
-      ${pjRow('— Produce',`pj-${k}-prod`,'color:var(--red)')}
+      ${pjRow('— Produce (bowls)',`pj-${k}-prod`,'color:var(--red)')}
+      ${e.adds.length?pjRow('— Produce (add-ons)',`pj-${k}-proda`,'color:var(--red)'):''}
       ${pjRow('— Staff, truck, transport, setup',`pj-${k}-fix`,'color:var(--red)')}
       ${pjRow('— Festival fee',`pj-${k}-fee`,'color:var(--red)')}
       ${pjRow('— Shared overhead',`pj-${k}-sh`,'color:var(--orange)')}
@@ -531,6 +550,7 @@ function pjCard(e){
   </div>`;
 }
 function pjIn(k,f,v){const n=parseFloat(v);if(isFinite(n)){EV[k][f]=n;pjUpdate();}}
+function pjAdd(k,i,f,v){const n=parseFloat(v);if(isFinite(n)){EV[k].adds[i][f]=n;pjUpdate();}}
 
 function pjUpdate(){
   const eps=+gid('pj-eps').value;
@@ -548,8 +568,12 @@ function pjUpdate(){
     const r=pjCalc(e,dP,vol,cp,eps);
     gid(`pj-${k}-p`).textContent='€'+r.P.toFixed(2);
     gid(`pj-${k}-b`).textContent=Math.round(r.bowls).toLocaleString();
+    gid(`pj-${k}-rb`).textContent=EUR(r.bowlNet);
+    r.adds.forEach((a,i)=>{gid(`pj-${k}-ra${i}`).textContent=EUR(a.net)+' · '+Math.round(a.u).toLocaleString()+' units';});
+    const ro=gid(`pj-${k}-ro`);if(ro)ro.textContent=f0(r.other);
     gid(`pj-${k}-rev`).textContent=EUR(r.rev);
-    gid(`pj-${k}-prod`).textContent='-'+EUR(r.produce);
+    gid(`pj-${k}-prod`).textContent='-'+EUR(r.prodB);
+    const pa=gid(`pj-${k}-proda`);if(pa)pa.textContent='-'+EUR(r.prodA);
     gid(`pj-${k}-fix`).textContent='-'+EUR(e.fixed);
     gid(`pj-${k}-fee`).textContent='-'+EUR(r.fee);
     gid(`pj-${k}-sh`).textContent='-'+EUR(e.shared);
@@ -577,7 +601,6 @@ function pjUpdate(){
     <div class="kpi-card"><div class="kpi-label">2026, same events</div><div class="kpi-value">${hasCmp?f0(tot.om26):'—'}</div><div class="kpi-sub">${hasCmp?'excludes unconfirmed events':'no 2026 comparison'}</div></div>
     <div class="kpi-card orange"><div class="kpi-label">Net revenue</div><div class="kpi-value">${EUR(tot.rev)}</div><div class="kpi-sub">${Math.round(tot.bowls).toLocaleString()} bowls</div></div>
     <div class="kpi-card blue"><div class="kpi-label">Change vs 2026</div><div class="kpi-value" style="color:${dTot>=0?'var(--lime)':'var(--red)'}">${hasCmp?(dTot>=0?'+':'-')+EUR(dTot):'—'}</div><div class="kpi-sub">${hasCmp?'events that also ran in 2026':''}</div></div>`;
-  // chart
   if(CH.pj){
     CH.pj.data.datasets.forEach((ds,i)=>{
       const e=Object.values(EV)[i],st=sets[e.key];
